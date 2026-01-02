@@ -40,7 +40,9 @@ public class DBImplementation implements ClassDAO {
     final String SQLMODIFYPROFILE = "UPDATE PROFILE_ P SET P.PASSWORD_ = ?, P.EMAIL = ?, P.NAME_ = ?, P.TELEPHONE = ?, P.SURNAME = ? WHERE USERNAME = ?;";
     final String SQLMODIFYUSER = "UPDATE USER_ U SET U.GENDER = ? WHERE USERNAME = ?";
 
-    private final String SLQSELECTNUSER = "SELECT u.USERNAME FROM USER_ u;";
+    private final String SQLSELECTNUSER = "SELECT u.USERNAME FROM USER_ u;";
+    
+    private final String SQLCHECKPAYMENT = "SELECT c.* FROM CARD c JOIN USER_ u ON u.CARD_NUMBER = c.CARD_NUMBER WHERE U.USERNAME = ?;";
 
     /**
      * Default constructor that loads DB configuration.
@@ -360,7 +362,7 @@ public class DBImplementation implements ClassDAO {
         Connection con = null;
         try {
             con = ConnectionPool.getConnection();
-            stmt = con.prepareStatement(SLQSELECTNUSER);
+            stmt = con.prepareStatement(SQLSELECTNUSER);
             ResultSet result = stmt.executeQuery();
             while (result.next()) {
                 listaUsuarios.add(result.getString("USERNAME"));
