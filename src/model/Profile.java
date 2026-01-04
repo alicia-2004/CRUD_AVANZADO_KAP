@@ -5,6 +5,8 @@
  */
 package model;
 
+import javax.persistence.*;
+
 /**
  * Abstract class representing a general profile in the system.
  * Contains common attributes such as username, password, email, and personal information.
@@ -12,13 +14,30 @@ package model;
  * 
  * @author acer
  */
+@Entity
+@Table(name = "PROFILE_")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Profile {
+    @Id
+    @Column(name = "USERNAME", length = 40)
     private String username;
+    
+    @Column(name = "PASSWORD_", length = 40)
     private String password;
+    
+    @Column(name = "EMAIL", length = 40, unique = true)
     private String email;
+    
+    @Column(name = "USER_CODE", unique = true)
     private int userCode;
+    
+    @Column(name = "NAME_", length = 40)
     private String name;
+    
+    @Column(name = "TELEPHONE", length = 9)
     private String telephone;
+    
+    @Column(name = "SURNAME", length = 40)
     private String surname;
 
     /**
