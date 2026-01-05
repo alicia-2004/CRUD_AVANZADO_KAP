@@ -18,11 +18,12 @@ public class User extends Profile {
     @Column(name = "GENDER", length = 40)
     private String gender;
     
-    @OneToOne
-    @JoinColumn(name = "CARD_NUMBER")  // FOREIGN OF CARD
-    private Card cardNumber;
+    /*@OneToOne
+    @JoinColumn(name = "CARD_NUMBER")*/  // FOREIGN OF CARD
+    @Column(name = "CARD_NUMBER",  length = 24)
+    private String cardNumber;
 
-    public User(String gender, Card cardNumber, String username, String password, String email, int userCode, String name, String telephone, String surname) {
+    public User(String gender, String cardNumber, String username, String password, String email, int userCode, String name, String telephone, String surname) {
         super(username, password, email, userCode, name, telephone, surname);
         this.gender = gender;
         this.cardNumber = cardNumber;
@@ -37,8 +38,8 @@ public class User extends Profile {
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
 
-    public Card getCardNumber() { return cardNumber; }
-    public void setCardNumber(Card cardNumber) { this.cardNumber = cardNumber; }
+    public String getCardNumber() { return cardNumber; }
+    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
 
     @Override
     public void logIn() {

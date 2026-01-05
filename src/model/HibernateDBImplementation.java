@@ -237,6 +237,6 @@ public class HibernateDBImplementation implements ClassDAO {
         }
         // Asumo que tu HiloConnection puede proporcionar una Session de Hibernate
         // Si no, necesitarías adaptar HiloConnection para Hibernate
-        return HibernateUtil.getSessionFactory().openSession();
+        return thread.getConnection();
     }
 }

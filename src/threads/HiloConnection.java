@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.ConnectionPool;
+import model.HibernateUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * Thread class to obtain a database connection asynchronously.
@@ -22,7 +24,7 @@ public class HiloConnection extends Thread {
     private int delay = 30;
     private boolean end = false;
     private boolean ready = false;
-    private Connection con;
+    private Session con;
 
     public HiloConnection(int delay) {
         this.delay = delay;
@@ -31,7 +33,7 @@ public class HiloConnection extends Thread {
     /**
      * Returns the connection obtained by the thread.
      */
-    public Connection getConnection() {
+    public Session getConnection() {
         return con;
     }
 
@@ -54,8 +56,8 @@ public class HiloConnection extends Thread {
     public void run() {
         try {
             try {
-                con = ConnectionPool.getConnection();
-            } catch (SQLException ex) {
+                con = HibernateUtil.getSessionFactory().openSession();
+            } catch (HibernateException ex) {
                 Logger.getLogger(HiloConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             ready = true;
@@ -78,7 +80,7 @@ public class HiloConnection extends Thread {
             if (con != null) {
                 try {
                     con.close();
-                } catch (SQLException ex) {
+                } catch (HibernateException ex) {
                     Logger.getLogger(HiloConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
