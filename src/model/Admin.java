@@ -5,11 +5,17 @@
  */
 package model;
 
+import javax.persistence.*;
+
 /**
  * Represents an admin profile in the system.
  * Extends Profile and adds the currentAccount attribute.
  */
+@Entity
+@Table(name = "ADMIN_")
+@PrimaryKeyJoinColumn(name = "USERNAME")
 public class Admin extends Profile {
+    @Column(name = "CURRENT_ACCOUNT", length = 40)
     private String currentAccount;
 
     public Admin(String currentAccount, String username, String password, String email, int userCode, String name, String telephone, String surname) {

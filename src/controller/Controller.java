@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import model.ClassDAO;
-import model.DBImplementation;
 import model.Profile;
 import model.User;
 

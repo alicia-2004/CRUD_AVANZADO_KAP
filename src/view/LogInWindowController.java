@@ -21,7 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import model.DBImplementation;
+import model.HibernateDBImplementation;
 import model.Profile;
 
 /**
@@ -46,7 +46,7 @@ public class LogInWindowController implements Initializable {
     private Label labelIncorrecto; // Label to show error messages
 
     // Controller handling business logic
-    private Controller cont = new Controller(new DBImplementation());
+    private Controller cont = new Controller(new HibernateDBImplementation());
 
     /**
      * Opens the SignUp window.
