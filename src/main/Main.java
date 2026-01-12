@@ -1,5 +1,5 @@
-
 package main;
+
 import controller.Controller;
 import java.time.LocalDate;
 import java.util.Map;
@@ -10,10 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import utilities.Utilities;
-
-
-
 
 public class Main extends Application {
 
@@ -38,7 +37,24 @@ public class Main extends Application {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
+        crearTablasHibernate();
         launch(args);
+    }
+
+    private static void crearTablasHibernate() {
+        System.out.println("Inicializando Hibernate");
+        try {
+            // Solo abrir y cerrar SessionFactory crea las tablas
+            SessionFactory sessionFactory = model.HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.close();
+
+            System.out.println("Tablas creadas/validadas");
+        } catch (Exception e) {
+            System.err.println("Error al crear tablas: " + e.getMessage());
+            // Decidir si continuar o salir
+            System.exit(1);  // Sale si no puede crear tablas
+        }
     }
 
 }

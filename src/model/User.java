@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USER_")
-@PrimaryKeyJoinColumn(name = "USERNAME")
+@PrimaryKeyJoinColumn(name = "USER_CODE")
 public class User extends Profile {
     @Column(name = "GENDER", length = 40)
     private String gender;

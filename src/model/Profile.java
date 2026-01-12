@@ -19,8 +19,8 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Profile {
     @Id
-    @Column(name = "USERNAME", length = 40)
-    private String username;
+    @Column(name = "USER_CODE")
+    private int userCode;
     
     @Column(name = "PASSWORD_", length = 40)
     private String password;
@@ -28,8 +28,8 @@ public abstract class Profile {
     @Column(name = "EMAIL", length = 40, unique = true)
     private String email;
     
-    @Column(name = "USER_CODE", unique = true)
-    private int userCode;
+    @Column(name = "USERNAME", unique = true)
+    private String username;
     
     @Column(name = "NAME_", length = 40)
     private String name;

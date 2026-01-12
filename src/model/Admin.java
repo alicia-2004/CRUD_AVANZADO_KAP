@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "ADMIN_")
-@PrimaryKeyJoinColumn(name = "USERNAME")
+@PrimaryKeyJoinColumn(name = "USER_CODE")
 public class Admin extends Profile {
     @Column(name = "CURRENT_ACCOUNT", length = 40)
     private String currentAccount;
