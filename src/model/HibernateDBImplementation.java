@@ -5,6 +5,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import threads.HiloConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -228,20 +229,6 @@ public class HibernateDBImplementation implements ClassDAO {
         }
         return listaUsuarios;
     }
-     
-    private HashMap<Integer, Shoe> loadShoes(){
-        HiloConnection connectionThread = new HiloConnection(30);
-        connectionThread.start();
-        HashMap mapShoes = new HashMap();
-        
-        try {
-            Session session = waitForHibernateSession(connectionThread);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(HibernateDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return mapShoes;
-    }
 
     /**
      * Waits for a Hibernate Session from a HiloConnection thread.
@@ -256,5 +243,35 @@ public class HibernateDBImplementation implements ClassDAO {
         // Si no, necesitarías adaptar HiloConnection para Hibernate
         return thread.getConnection();
     }
+
+    @Override
+    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public HashMap<Integer, Shoe> loadShoes() {
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        HashMap<Integer, Shoe> mapShoe = new HashMap<>();
+
+        try {
+            Session session = waitForHibernateSession(connectionThread);
+            
+            String hql = "SELECT * FROM Shoe";
+            Query<Shoe> query = session.createQuery(hql, Shoe.class);
+            List<Shoe> listShoes = query.list();
+            
+            
+            for(Shoe shoe:listShoes) {
+                mapShoe.put(shoe.getId(),shoe);
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(HibernateDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return mapShoe;
+    }
+   
     
 }
