@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "USER_")
-@PrimaryKeyJoinColumn(name = "USER_CODE")
+@PrimaryKeyJoinColumn(name = "USERNAME")
 public class User extends Profile {
     @Column(name = "GENDER", length = 40)
     private String gender;
@@ -23,8 +23,8 @@ public class User extends Profile {
     @Column(name = "CARD_NUMBER",  length = 24)
     private String cardNumber;
 
-    public User(String gender, String cardNumber, String username, String password, String email, int userCode, String name, String telephone, String surname) {
-        super(username, password, email, userCode, name, telephone, surname);
+    public User(String gender, String cardNumber, String username, String password, String email, String name, String telephone, String surname) {
+        super(username, password, email, name, telephone, surname);
         this.gender = gender;
         this.cardNumber = cardNumber;
     }

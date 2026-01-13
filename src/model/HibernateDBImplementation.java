@@ -5,7 +5,10 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import threads.HiloConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation of ClassDAO using Hibernate ORM.
@@ -65,7 +68,7 @@ public class HibernateDBImplementation implements ClassDAO {
             
             
             User user = new User(gender, cardNumber, username, password, email, 
-                                0, name, telephone, surname); // userCode lo genera la BD
+                                name, telephone, surname); // userCode lo genera la BD
             
             session.save(user);
             tx.commit();
@@ -225,6 +228,20 @@ public class HibernateDBImplementation implements ClassDAO {
         }
         return listaUsuarios;
     }
+     
+    private HashMap<Integer, Shoe> loadShoes(){
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        HashMap mapShoes = new HashMap();
+        
+        try {
+            Session session = waitForHibernateSession(connectionThread);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(HibernateDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return mapShoes;
+    }
 
     /**
      * Waits for a Hibernate Session from a HiloConnection thread.
@@ -239,4 +256,5 @@ public class HibernateDBImplementation implements ClassDAO {
         // Si no, necesitarías adaptar HiloConnection para Hibernate
         return thread.getConnection();
     }
+    
 }
