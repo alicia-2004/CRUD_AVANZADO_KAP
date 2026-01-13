@@ -5,16 +5,26 @@
  */
 package model;
 
+import javax.persistence.*;
+
 /**
  * Represents a standard user in the system.
  * Extends Profile and adds gender and card number attributes.
  */
+@Entity
+@Table(name = "USER_")
+@PrimaryKeyJoinColumn(name = "USERNAME")
 public class User extends Profile {
+    @Column(name = "GENDER", length = 40)
     private String gender;
+    
+    /*@OneToOne
+    @JoinColumn(name = "CARD_NUMBER")*/  // FOREIGN OF CARD
+    @Column(name = "CARD_NUMBER",  length = 24)
     private String cardNumber;
 
-    public User(String gender, String cardNumber, String username, String password, String email, int userCode, String name, String telephone, String surname) {
-        super(username, password, email, userCode, name, telephone, surname);
+    public User(String gender, String cardNumber, String username, String password, String email, String name, String telephone, String surname) {
+        super(username, password, email, name, telephone, surname);
         this.gender = gender;
         this.cardNumber = cardNumber;
     }
@@ -22,7 +32,7 @@ public class User extends Profile {
     public User() {
         super();
         this.gender = "";
-        this.cardNumber = "";
+        this.cardNumber = null;
     }
 
     public String getGender() { return gender; }

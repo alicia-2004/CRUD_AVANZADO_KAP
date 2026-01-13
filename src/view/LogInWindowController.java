@@ -21,12 +21,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import model.DBImplementation;
+import model.HibernateDBImplementation;
 import model.Profile;
 
 /**
- * Controller for the Login window.
- * Handles user login and navigation to the main menu or signup window.
+ * Controller for the Login window. Handles user login and navigation to the
+ * main menu or signup window.
  */
 public class LogInWindowController implements Initializable {
 
@@ -46,7 +46,7 @@ public class LogInWindowController implements Initializable {
     private Label labelIncorrecto; // Label to show error messages
 
     // Controller handling business logic
-    private Controller cont = new Controller(new DBImplementation());
+    private Controller cont = new Controller(new HibernateDBImplementation());
 
     /**
      * Opens the SignUp window.
@@ -73,8 +73,8 @@ public class LogInWindowController implements Initializable {
     }
 
     /**
-     * Attempts to log in the user.
-     * If successful, opens MenuWindow; otherwise, shows an error.
+     * Attempts to log in the user. If successful, opens MenuWindow; otherwise,
+     * shows an error.
      */
     @FXML
     private void logIn() {
@@ -85,7 +85,30 @@ public class LogInWindowController implements Initializable {
         } else {
             Profile profile = cont.logIn(username, password);
             if (profile != null) {
-                try {
+
+               /* try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
+                    Parent root = fxmlLoader.load();
+
+                    view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                    controllerWindow.setUsuario(profile);
+                    controllerWindow.setCont(cont);
+
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+
+                    Stage currentStage = (Stage) Button_LogIn.getScene().getWindow();
+                    currentStage.close();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                labelIncorrecto.setText("The username and/or password are incorrect.");
+            }
+        }
+        */ try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
                     Parent root = fxmlLoader.load();
 
