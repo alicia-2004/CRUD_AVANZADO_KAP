@@ -5,15 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import threads.HiloConnection;
 
 /**
- * Implementation of ClassDAO using database operations.
- * Handles all database interactions for users and admins.
- * Provides login, signup, deletion, modification, and retrieval of usernames.
- * 
+ * Implementation of ClassDAO using database operations. Handles all database
+ * interactions for users and admins. Provides login, signup, deletion,
+ * modification, and retrieval of usernames.
+ *
  * Author: acer
  */
 public class DBImplementation implements ClassDAO {
@@ -40,7 +41,9 @@ public class DBImplementation implements ClassDAO {
     final String SQLMODIFYPROFILE = "UPDATE PROFILE_ P SET P.PASSWORD_ = ?, P.EMAIL = ?, P.NAME_ = ?, P.TELEPHONE = ?, P.SURNAME = ? WHERE USERNAME = ?;";
     final String SQLMODIFYUSER = "UPDATE USER_ U SET U.GENDER = ? WHERE USERNAME = ?";
 
-    private final String SLQSELECTNUSER = "SELECT u.USERNAME FROM USER_ u;";
+    private final String SQLSELECTNUSER = "SELECT u.USERNAME FROM USER_ u;";
+
+    private final String SQLCHECKPAYMENT = "SELECT c.* FROM CARD c JOIN USER_ u ON u.CARD_NUMBER = c.CARD_NUMBER WHERE U.USERNAME = ?;";
 
     /**
      * Default constructor that loads DB configuration.
@@ -106,8 +109,12 @@ public class DBImplementation implements ClassDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (stmt != null) stmt.close();
-                if (con != null) con.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.out.println("Error closing database connection");
                 e.printStackTrace();
@@ -149,7 +156,9 @@ public class DBImplementation implements ClassDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (stmt != null) stmt.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
                 connectionThread.releaseConnection();
             } catch (SQLException e) {
                 System.out.println("Error closing DB connection after signup");
@@ -170,13 +179,13 @@ public class DBImplementation implements ClassDAO {
         PreparedStatement stmtUser = null;
         try {
             Connection con = waitForConnection(connectionThread);
-            
+
             // verificar password
             String checkPassword = "SELECT PASSWORD_ FROM PROFILE_ WHERE USERNAME = ?";
             stmt = con.prepareStatement(checkPassword);
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 String dbPassword = rs.getString("PASSWORD_");
                 if (!dbPassword.equals(password)) {
@@ -187,14 +196,14 @@ public class DBImplementation implements ClassDAO {
             }
             rs.close();
             stmt.close();
-            
+
             // eliminar de USER_ primero
             String deleteUser = "DELETE FROM USER_ WHERE USERNAME = ?";
             stmtUser = con.prepareStatement(deleteUser);
             stmtUser.setString(1, username);
             stmtUser.executeUpdate();
             stmtUser.close();
-            
+
             // eliminar de PROFILE_
             stmt = con.prepareStatement(SLQDELETEPROFILE);
             stmt.setString(1, username);
@@ -232,13 +241,13 @@ public class DBImplementation implements ClassDAO {
         PreparedStatement stmtDeleteAdmin = null;
         try {
             Connection con = waitForConnection(connectionThread);
-            
+
             // verificar password del admin logueado
             String checkAdminPassword = "SELECT PASSWORD_ FROM PROFILE_ WHERE USERNAME = ?";
             stmt = con.prepareStatement(checkAdminPassword);
             stmt.setString(1, adminUsername);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 String dbPassword = rs.getString("PASSWORD_");
                 if (!dbPassword.equals(adminPassword)) {
@@ -249,21 +258,21 @@ public class DBImplementation implements ClassDAO {
             }
             rs.close();
             stmt.close();
-            
+
             // eliminar de USER_ si existe
             String deleteUser = "DELETE FROM USER_ WHERE USERNAME = ?";
             stmtDeleteUser = con.prepareStatement(deleteUser);
             stmtDeleteUser.setString(1, usernameToDelete);
             stmtDeleteUser.executeUpdate();
             stmtDeleteUser.close();
-            
+
             // eliminar de ADMIN_ si existe
             String deleteAdmin = "DELETE FROM ADMIN_ WHERE USERNAME = ?";
             stmtDeleteAdmin = con.prepareStatement(deleteAdmin);
             stmtDeleteAdmin.setString(1, usernameToDelete);
             stmtDeleteAdmin.executeUpdate();
             stmtDeleteAdmin.close();
-            
+
             // eliminar de PROFILE_
             String deleteProfile = "DELETE FROM PROFILE_ WHERE USERNAME = ?";
             stmt = con.prepareStatement(deleteProfile);
@@ -304,7 +313,7 @@ public class DBImplementation implements ClassDAO {
 
         try {
             Connection con = waitForConnection(connectionThread);
-            
+
             // actualizar PROFILE_
             stmt = con.prepareStatement(SQLMODIFYPROFILE);
             stmt.setString(1, password);
@@ -322,7 +331,7 @@ public class DBImplementation implements ClassDAO {
                 stmtUser.setString(2, username);
                 stmtUser.executeUpdate();
                 stmtUser.close();
-                
+
                 success = true;
             } else {
                 System.out.println("Usuario no encontrado en la base de datos");
@@ -360,7 +369,7 @@ public class DBImplementation implements ClassDAO {
         Connection con = null;
         try {
             con = ConnectionPool.getConnection();
-            stmt = con.prepareStatement(SLQSELECTNUSER);
+            stmt = con.prepareStatement(SQLSELECTNUSER);
             ResultSet result = stmt.executeQuery();
             while (result.next()) {
                 listaUsuarios.add(result.getString("USERNAME"));
@@ -370,8 +379,12 @@ public class DBImplementation implements ClassDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (stmt != null) stmt.close();
-                if (con != null) con.close();
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.out.println("Error closing DB connection after retrieving usernames");
                 e.printStackTrace();
@@ -394,5 +407,46 @@ public class DBImplementation implements ClassDAO {
             attempts++;
         }
         return thread.getConnection();
+    }
+
+    @Override
+    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
+        Connection con = null;
+        Boolean success = false;
+        try {
+            con = ConnectionPool.getConnection();
+            stmt = con.prepareStatement(SQLCHECKPAYMENT);
+            stmt.setString(1, username);
+            ResultSet result = stmt.executeQuery();
+            if (!(result.next())) {
+                stmt = con.prepareStatement(SLQLOGINADMIN);
+                stmt.setString(1, username);
+                result = stmt.executeQuery();
+                if (result.next()) {
+                    if ((cvv.equals(result.getString("CVV"))) && (numTarjeta.equals(result.getString("CARD_NUMBER"))) && (caducidad.equals(result.getDate("EXPIRATION_DATE")))) {
+                        success = true;
+                    } else {
+                        success = false;
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Database query error");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing database connection");
+                e.printStackTrace();
+            }
+        }
+        return success;
     }
 }

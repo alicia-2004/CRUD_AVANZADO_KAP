@@ -71,6 +71,9 @@ public class Controller {
     public Boolean modificarUser(String password, String email, String name, String telephone, String surname, String username, String gender) {
         return dao.modificarUser(password, email, name, telephone, surname, username, gender);
     }
+    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username){
+        return dao.checkPayments(cvv, numTarjeta, caducidad, username);
+    }
 
     /**
      * Retrieves a list of usernames for GUI combo boxes.
