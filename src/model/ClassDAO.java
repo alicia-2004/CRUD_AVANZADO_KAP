@@ -23,7 +23,7 @@ public interface ClassDAO {
     public Boolean dropOutAdmin(String usernameToDelete, String adminUsername, String adminPassword);
     public Boolean modificarUser (String password, String email, String name, String telephone, String surname, String username, String gender);
     public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username);
-    public HashMap<Integer, Shoe> loadShoes();
+    public List<Shoe> loadShoes();
   
     List comboBoxInsert();
 }

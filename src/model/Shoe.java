@@ -50,10 +50,13 @@ public class Shoe {
     
     @Column(name = "STOCK")
     private int stock;
+    
+    @Column(name = "IMGPATH", nullable = false, length = 100)
+    private String path;
 
     public Shoe() {}
 
-    public Shoe(double price, String model, double size, Exclusive exclusive, java.util.Date manufactorDate, String color, String origin, String brand, Reserved reserved, int stock) {
+    public Shoe(double price, String model, double size, Exclusive exclusive, java.util.Date manufactorDate, String color, String origin, String brand, Reserved reserved, int stock ,String path) {
         this.price = price;
         this.model = model;
         this.size = size;
@@ -64,7 +67,18 @@ public class Shoe {
         this.brand = brand;
         this.reserved = reserved;
         this.stock = stock;
+        this.path = path;
     }
+
+
+    public Shoe(int id, double price, String model, String brand, String path) {
+        this.id = id;
+        this.price = price;
+        this.model = model;
+        this.brand = brand;
+        this.path = path;
+    }
+    
 
     public int getId() { return id; }
     public double getPrice() { return price; }
@@ -77,7 +91,8 @@ public class Shoe {
     public String getBrand() { return brand; }
     public Reserved getReserved() { return reserved; }
     public int getStock() { return stock; }
-
+    public String getImgPath() { return path; }
+    
     public void setId(int id) { this.id = id; }
     public void setPrice(double price) { this.price = price; }
     public void setModel(String model) { this.model = model; }
@@ -89,7 +104,8 @@ public class Shoe {
     public void setBrand(String brand) { this.brand = brand; }
     public void setReserved(Reserved reserved) { this.reserved = reserved; }
     public void setStock(int stock) { this.stock = stock; }
-
+    public void setImgPath(String path) { this.path = path; }
+    
     @Override
     public String toString() {
         return "Shoe{id=" + id + ", model=" + model + ", brand=" + brand + ", price=" + price + "}";

@@ -80,7 +80,7 @@ public class Controller {
         return dao.comboBoxInsert();
     }
     
-    public HashMap<Integer, Shoe> loadShoes(){
+    public List<Shoe> loadShoes(){
         return dao.loadShoes();
     }
 }
