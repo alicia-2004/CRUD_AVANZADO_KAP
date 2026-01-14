@@ -7,10 +7,12 @@ package controller;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.ClassDAO;
 import model.Profile;
+import model.Shoe;
 import model.User;
 
 /**
@@ -76,5 +78,9 @@ public class Controller {
      */
     public List comboBoxInsert() {
         return dao.comboBoxInsert();
+    }
+    
+    public HashMap<Integer, Shoe> loadShoes(){
+        return dao.loadShoes();
     }
 }
