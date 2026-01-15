@@ -57,14 +57,17 @@
             <FlowPane hgap="10.0" prefHeight="29.0" prefWidth="476.0">
                <children>
                   <Label prefHeight="18.0" prefWidth="41.0" text="Search:" />
-                  <TextField fx:id="searchTextField" />
-                  <Label prefHeight="18.0" prefWidth="86.0" text="Filter by price:" />
-                  <ImageView fx:id="imgFilter" fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" />
+                  <TextField fx:id="searchTextField" onKeyPressed="#filterShoes" promptText="NIke " />
+                  <Label prefHeight="18.0" prefWidth="117.0" text="Filter by price:" />
+                  <ImageView fx:id="imgFilter" fitHeight="20.0" fitWidth="23.0" onMouseClicked="#filterByPrice" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/filtro.png" />
+                     </image></ImageView>
                </children>
             </FlowPane>
-            <ScrollPane prefHeight="313.0" prefWidth="498.0">
+            <ScrollPane prefHeight="423.0" prefWidth="498.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="309.0" prefWidth="474.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="474.0">
                      <children>
                         <GridPane fx:id="gridShoes" layoutX="-1.0" layoutY="2.0" prefHeight="295.0" prefWidth="464.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                           <columnConstraints>

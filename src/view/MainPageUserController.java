@@ -8,6 +8,7 @@ package view;
 import controller.Controller;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.Event;
@@ -31,6 +32,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Profile;
@@ -61,19 +64,16 @@ public class MainPageUserController implements Initializable {
 
     private Controller cont;
     private Profile profile;
+    private List<Shoe> shoeList;
 
     /**
      * Initializes the controller class.
      */
-    private void loadShoes() {
-
-    }
-
     public void setCont(Controller cont) {
         this.cont = cont;
 
         if (cont != null) {
-            loadShoesToGridPane();
+            loadShoesToGridPane(cont.loadShoes());
         }
     }
 
@@ -98,16 +98,15 @@ public class MainPageUserController implements Initializable {
         }
     }
 
-    private void loadShoesToGridPane() {
-        List<Shoe> shoeList = cont.loadShoes();
-
+    private void loadShoesToGridPane(List<Shoe> list) {
         //Calculate how many columns 
+        shoeList = list;
         if (!shoeList.isEmpty()) {
-
+            System.out.println("Ha llegado dentro");
             //Calculate how wmany rows
             int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
 
-            for (int i = 0; 1 > neededRows; i++) {
+            for (int i = 0; i > neededRows; i++) {
                 RowConstraints row = new RowConstraints();
                 row.setPrefHeight(164);
                 gridShoes.getRowConstraints().add(row);
@@ -122,6 +121,7 @@ public class MainPageUserController implements Initializable {
                 int column = i % 2;
 
                 gridShoes.add(vbox, column, row);
+                System.out.println("Se ha creado el vbox");
             }
         }
 
@@ -162,9 +162,11 @@ public class MainPageUserController implements Initializable {
         //Image of the shoe in the vbox
         ImageView imgView = new ImageView();
         String shoeImgPath = shoe.getImgPath();
+        System.out.println(shoeImgPath);
 
         try {
             Image img = new Image(getClass().getResourceAsStream(shoeImgPath));
+            imgView.setImage(img);
         } catch (Exception e) {
             Image imgDefault = new Image(getClass().getResourceAsStream("../images/default_shoe.png"));
             imgView.setImage(imgDefault);
@@ -206,4 +208,34 @@ public class MainPageUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    //filter
+    @FXML
+    private void filterShoes(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            String textToSearch = searchTextField.getText();
+            List<Shoe> filteredShoe = new ArrayList<>();
+            shoeList = cont.loadShoes();
+
+            if (textToSearch != "") {
+                for (Shoe shoe : shoeList) {
+                    if (shoe.getBrand().equalsIgnoreCase(textToSearch)) {
+                        filteredShoe.add(shoe);
+                    }
+                }
+                gridConfiguration();
+                loadShoesToGridPane(filteredShoe);
+
+            }
+        } else {
+            gridConfiguration();
+            loadShoesToGridPane(cont.loadShoes());
+        }
+
+    }
+
+    @FXML
+    private void filterByPrice(MouseEvent event) {
+    }
+
 }
