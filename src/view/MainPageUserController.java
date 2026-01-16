@@ -236,6 +236,7 @@ public class MainPageUserController implements Initializable {
 
     @FXML
     private void filterByPrice(MouseEvent event) {
+        
     }
 
 }
