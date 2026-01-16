@@ -86,12 +86,12 @@ public class LogInWindowController implements Initializable {
             Profile profile = cont.logIn(username, password);
             if (profile != null) {
 
-               /* try {
+                try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                     Parent root = fxmlLoader.load();
 
                     view.MainPageUserController controllerWindow = fxmlLoader.getController();
-                    controllerWindow.setUsuario(profile);
+                    controllerWindow.setUser(profile);
                     controllerWindow.setCont(cont);
 
                     Stage stage = new Stage();
@@ -108,7 +108,7 @@ public class LogInWindowController implements Initializable {
                 labelIncorrecto.setText("The username and/or password are incorrect.");
             }
         }
-        */ try {
+        /* try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
                     Parent root = fxmlLoader.load();
 
@@ -129,7 +129,7 @@ public class LogInWindowController implements Initializable {
             } else {
                 labelIncorrecto.setText("The username and/or password are incorrect.");
             }
-        }
+        }*/
     }
 
     @Override

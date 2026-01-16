@@ -7,6 +7,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,9 @@ public interface ClassDAO {
     public Boolean signUp(String gender, String cardNumber, String username, String password, String email, String name, String telephone, String surname);
     public Boolean dropOutUser(String username, String password);
     public Boolean dropOutAdmin(String usernameToDelete, String adminUsername, String adminPassword);
-    public Boolean modificarUser(String password, String email, String name, String telephone, String surname, String username, String gender);
+    public Boolean modificarUser (String password, String email, String name, String telephone, String surname, String username, String gender);
     public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username);
+    public List<Shoe> loadShoes();
   
     List comboBoxInsert();
 }
