@@ -237,6 +237,28 @@ public class MainPageUserController implements Initializable {
     @FXML
     private void filterByPrice(MouseEvent event) {
         
-    }
+            List<Shoe> filteredShoe = new ArrayList<>();
+            shoeList = cont.loadShoes();
+
+            for (int i = 0; i < shoeList.size() - 1; i++) {
+            for (int j = 0; j < shoeList.size() - 1 - i; j++) {
+                // Comparar precios directamente
+                if (shoeList.get(j).getPrice() > shoeList.get(j + 1).getPrice()) {
+                    // Intercambiar objetos
+                    Shoe temp = shoeList.get(j);
+                    shoeList.set(j, shoeList.get(j + 1));
+                    shoeList.set(j + 1, temp);
+                }
+            }
+        }
+                gridConfiguration();
+                loadShoesToGridPane(filteredShoe);
+
+            }
+        /*} else {
+            gridConfiguration();
+            loadShoesToGridPane(cont.loadShoes());
+        }*/
+    
 
 }
