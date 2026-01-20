@@ -9,8 +9,13 @@ import controller.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -65,6 +70,9 @@ public class MainPageUserController implements Initializable {
     private Controller cont;
     private Profile profile;
     private List<Shoe> shoeList;
+    private int filerState;
+    @FXML
+    private Label lblFIlter;
 
     /**
      * Initializes the controller class.
@@ -106,7 +114,7 @@ public class MainPageUserController implements Initializable {
             //Calculate how wmany rows
             int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
 
-            for (int i = 0; i > neededRows; i++) {
+            for (int i = 0; i < neededRows; i++) {
                 RowConstraints row = new RowConstraints();
                 row.setPrefHeight(164);
                 gridShoes.getRowConstraints().add(row);
@@ -236,29 +244,59 @@ public class MainPageUserController implements Initializable {
 
     @FXML
     private void filterByPrice(MouseEvent event) {
-        
-            List<Shoe> filteredShoe = new ArrayList<>();
-            shoeList = cont.loadShoes();
 
-            for (int i = 0; i < shoeList.size() - 1; i++) {
-            for (int j = 0; j < shoeList.size() - 1 - i; j++) {
-                // Comparar precios directamente
-                if (shoeList.get(j).getPrice() > shoeList.get(j + 1).getPrice()) {
-                    // Intercambiar objetos
-                    Shoe temp = shoeList.get(j);
-                    shoeList.set(j, shoeList.get(j + 1));
-                    shoeList.set(j + 1, temp);
-                }
-            }
+        shoeList = cont.loadShoes();
+        List<Shoe> filteredShoe = new ArrayList<>(shoeList);
+
+        switch (filerState) {
+            case 0:  // Ascending order
+                Collections.sort(filteredShoe); 
+                lblFIlter.setText("Ascendending");
+                filerState = 1;
+                break;
+
+            case 1:  // Descendending order
+                Collections.sort(filteredShoe, new Comparator<Shoe>() {
+                    @Override
+                    public int compare(Shoe s1, Shoe s2) {
+                        lblFIlter.setText("Descendending");
+                        return s2.compareTo(s1); 
+                    }
+                });
+                filerState = 2;
+                break;
+
+            case 2:  // Original order
+                filteredShoe = shoeList; 
+                lblFIlter.setText("Original");
+                filerState = 0;
+                break;
         }
-                gridConfiguration();
-                loadShoesToGridPane(filteredShoe);
 
-            }
-        /*} else {
-            gridConfiguration();
-            loadShoesToGridPane(cont.loadShoes());
-        }*/
-    
+        gridConfiguration();
+        loadShoesToGridPane(filteredShoe);
+    }
+
+    @FXML
+    private void openModifyProfileWindow(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/ModifyWindow.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Modify your profile");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            view.ModifyWindowController controllerWindow = fxmlLoader.getController();
+            controllerWindow.setCont(cont);
+            controllerWindow.setProfile(profile);
+
+            // Close current window
+            Stage currentStage = (Stage) imgFilter.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException ex) {
+            Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

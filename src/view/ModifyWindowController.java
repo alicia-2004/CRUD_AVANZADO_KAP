@@ -110,11 +110,11 @@ public class ModifyWindowController implements Initializable {
                 successAlert.showAndWait();
                 
                 try {
-                    javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
+                    javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                     javafx.scene.Parent root = fxmlLoader.load();
 
-                    view.MenuWindowController controllerWindow = fxmlLoader.getController();
-                    controllerWindow.setUsuario(profile);
+                    view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                    controllerWindow.setUser(profile);
                     controllerWindow.setCont(this.cont);
                     javafx.stage.Stage stage = new javafx.stage.Stage();
                     stage.setScene(new javafx.scene.Scene(root));
@@ -152,11 +152,11 @@ public class ModifyWindowController implements Initializable {
                     successAlert.showAndWait();
                     
                     try {
-                        javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
+                        javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                         javafx.scene.Parent root = fxmlLoader.load();
 
-                        view.MenuWindowController controllerWindow = fxmlLoader.getController();
-                        controllerWindow.setUsuario(profile);
+                        view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                        controllerWindow.setUser(profile);
                         controllerWindow.setCont(this.cont);
 
                         Stage stage = new Stage();
@@ -184,11 +184,11 @@ public class ModifyWindowController implements Initializable {
     @FXML
     private void cancel() {
         try {
-            javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
+            javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
             javafx.scene.Parent root = fxmlLoader.load();
 
-            view.MenuWindowController controllerWindow = fxmlLoader.getController();
-            controllerWindow.setUsuario(profile);
+            view.MainPageUserController controllerWindow = fxmlLoader.getController();
+            controllerWindow.setUser(profile);
             controllerWindow.setCont(this.cont);
 
             Stage stage = new Stage();

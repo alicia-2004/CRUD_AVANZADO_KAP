@@ -41,7 +41,7 @@
                         <Menu fx:id="menuHome" mnemonicParsing="false" text="Home" />
                       <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Settings">
                         <items>
-                          <MenuItem fx:id="ModifyProfileSubmenu" mnemonicParsing="false" text="Modify Profile" />
+                          <MenuItem fx:id="ModifyProfileSubmenu" mnemonicParsing="false" onAction="#openModifyProfileWindow" text="Modify Profile" />
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Actions">
@@ -54,15 +54,25 @@
                   </MenuBar>
                </children>
             </FlowPane>
-            <FlowPane hgap="10.0" prefHeight="29.0" prefWidth="476.0">
+            <FlowPane prefHeight="29.0" prefWidth="476.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="41.0" text="Search:" />
-                  <TextField fx:id="searchTextField" onKeyPressed="#filterShoes" promptText="NIke " />
-                  <Label prefHeight="18.0" prefWidth="117.0" text="Filter by price:" />
-                  <ImageView fx:id="imgFilter" fitHeight="20.0" fitWidth="23.0" onMouseClicked="#filterByPrice" pickOnBounds="true" preserveRatio="true">
+                  <Label prefHeight="18.0" prefWidth="50.0" text="Search:" />
+                  <TextField fx:id="searchTextField" onKeyPressed="#filterShoes" prefHeight="26.0" prefWidth="118.0" promptText="NIke " />
+                  <Label prefHeight="18.0" prefWidth="109.0" text="Filter by price:">
+                     <FlowPane.margin>
+                        <Insets left="25.0" />
+                     </FlowPane.margin></Label>
+                  <ImageView fx:id="imgFilter" fitHeight="17.0" fitWidth="18.0" onMouseClicked="#filterByPrice" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/filtro.png" />
-                     </image></ImageView>
+                     </image>
+                     <FlowPane.margin>
+                        <Insets left="40.0" />
+                     </FlowPane.margin></ImageView>
+                  <Label fx:id="lblFIlter" prefHeight="18.0" prefWidth="118.0" text="Original">
+                     <FlowPane.margin>
+                        <Insets left="10.0" />
+                     </FlowPane.margin></Label>
                </children>
             </FlowPane>
             <ScrollPane prefHeight="423.0" prefWidth="498.0">
