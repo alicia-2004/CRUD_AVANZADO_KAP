@@ -21,8 +21,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+import model.Admin;
 import model.HibernateDBImplementation;
 import model.Profile;
+import model.User;
 
 /**
  * Controller for the Login window. Handles user login and navigation to the
@@ -85,24 +87,47 @@ public class LogInWindowController implements Initializable {
         } else {
             Profile profile = cont.logIn(username, password);
             if (profile != null) {
+                if (profile instanceof User) {
+                    System.out.println("USER");
 
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
-                    Parent root = fxmlLoader.load();
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
+                        Parent root = fxmlLoader.load();
 
-                    view.MainPageUserController controllerWindow = fxmlLoader.getController();
-                    controllerWindow.setUser(profile);
-                    controllerWindow.setCont(cont);
+                        view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                        controllerWindow.setUser(profile);
+                        controllerWindow.setCont(cont);
 
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.show();
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
 
-                    Stage currentStage = (Stage) Button_LogIn.getScene().getWindow();
-                    currentStage.close();
+                        Stage currentStage = (Stage) Button_LogIn.getScene().getWindow();
+                        currentStage.close();
 
-                } catch (IOException ex) {
-                    Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    System.out.println("ADMIN");
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/AdminModifyShoeFXML.fxml"));
+                        Parent root = fxmlLoader.load();
+                        view.AdminModifyShoeFXMLController controller = fxmlLoader.getController();
+                        controller.setCont(cont);
+                        controller.setProfile(profile);
+                        
+
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+
+                        Stage currentStage = (Stage) Button_LogIn.getScene().getWindow();
+                        currentStage.close();
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             } else {
                 labelIncorrecto.setText("The username and/or password are incorrect.");
