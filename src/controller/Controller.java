@@ -86,4 +86,11 @@ public class Controller {
     public List<Shoe> loadShoes(){
         return dao.loadShoes();
     }
+    
+    public Boolean dropShoe(Shoe shoe){
+    return dao.dropShoe(shoe);
+    }
+    public Boolean updateStockShoe(Shoe shoe, int stock){
+        return dao.updateStockShoe(shoe, stock);
+    }
 }

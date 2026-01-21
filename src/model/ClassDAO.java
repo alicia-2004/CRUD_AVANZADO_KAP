@@ -24,6 +24,8 @@ public interface ClassDAO {
     public Boolean modificarUser (String password, String email, String name, String telephone, String surname, String username, String gender);
     public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username);
     public List<Shoe> loadShoes();
+    public Boolean dropShoe(Shoe shoe);
+    public Boolean updateStockShoe (Shoe shoe, int stock);
   
     List comboBoxInsert();
 }

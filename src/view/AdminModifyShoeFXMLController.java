@@ -13,9 +13,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 import model.Profile;
 import model.Shoe;
 
@@ -40,10 +43,12 @@ public class AdminModifyShoeFXMLController implements Initializable {
     private TableColumn<Shoe, Integer> columnPrice;
     @FXML
     private TableColumn<Shoe, Integer> columnStock;
+    @FXML
+    private Button deleteButton;
 
-    private List<Shoe> listShoe;
+    private ObservableList<Shoe> listShoe;
     private Controller cont;
-    private Profile profile; 
+    private Profile profile;
 
     public Controller getCont() {
         return cont;
@@ -61,31 +66,55 @@ public class AdminModifyShoeFXMLController implements Initializable {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
-    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tableShoe.setEditable(true);
         listShoe = FXCollections.observableArrayList();
 
         // Enlazar columnas con atributos del modelo
         columnBrand.setCellValueFactory(new PropertyValueFactory<>("brand"));
         columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-        columnSize.setCellValueFactory(new PropertyValueFactory<>("edad"));
-        columnPrice.setCellValueFactory(new PropertyValueFactory<>("size"));
+        columnSize.setCellValueFactory(new PropertyValueFactory<>("size"));
+        columnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         columnStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        columnStock.setCellFactory(
+                TextFieldTableCell.forTableColumn(new IntegerStringConverter())
+        );
+        columnStock.setOnEditCommit(this::onStockEdit);
 
     }
-    
-    private void loadShoes() {
-    ObservableList<Shoe> shoes =
-        FXCollections.observableArrayList(cont.loadShoes());
-    tableShoe.setItems(shoes);
-}
 
-    
+    private void loadShoes() {
+        listShoe.setAll(cont.loadShoes());
+        tableShoe.setItems(listShoe);
+    }
+
+    @FXML
+    private void delete() {
+        Shoe selectedShoe = tableShoe.getSelectionModel().getSelectedItem();
+
+        if (cont.dropShoe(selectedShoe)) {
+            listShoe.remove(selectedShoe);
+        }
+    }
+
+    private void onStockEdit(
+            TableColumn.CellEditEvent<Shoe, Integer> event
+    ) {
+
+        Shoe shoe = event.getRowValue();
+        Integer newStock = event.getNewValue();
+
+        if (newStock < 0) {
+            tableShoe.refresh();
+            return;
+        }
+        cont.updateStockShoe(shoe, newStock);
+    }
 
 }
