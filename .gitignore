@@ -1,50 +1,40 @@
-# NetBeans - Archivos del IDE
+# NetBeans - Archivos PRIVADOS del usuario
 nbproject/private/
-nbproject/private/*
 nbproject/profiler-configuration.xml
 nbproject/executor.properties
 nbproject/genfiles.properties
-nbproject/build-impl.xml
 nbproject/ui.properties
-nbproject/configurations/
-nbproject/private/private.xml
-nbproject/private/private.properties
-nbproject/private/private.properties.*
-nbproject/private/configs/
 *.orig
 
-# Directorios de build NetBeans
+# Directorios de build
 build/
 nbbuild/
 dist/
 nbdist/
 
-# Archivos de usuario NetBeans
+# Archivos temporales
 *.swp
 *.swo
-
-# Archivos temporales NetBeans
 *~
 *.tmp
 *.temp
 
-# Archivos de caché NetBeans
+# Archivos de caché
 .cache/
 .cache-tests/
 
-# Directorios de dependencias NetBeans
-lib/
-libs/
-
-# Archivos de ejecución
+# Archivos compilados
 *.class
 *.war
 *.ear
-*.jar
 
 # Archivos de log
 *.log
 logs/
 
-# NetBeans 12+ adicional (opcional)
+# NetBeans 12+
 .nb-gradle/
+
+# Sistema
+.DS_Store
+Thumbs.db
