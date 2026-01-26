@@ -18,7 +18,7 @@ import model.User;
 /**
  * Controller class that handles interaction between the GUI and the database.
  * Provides login, signup, deletion, modification, and data retrieval methods.
- * 
+ *
  * Author: acer
  */
 public class Controller {
@@ -72,7 +72,8 @@ public class Controller {
     public Boolean modificarUser(String password, String email, String name, String telephone, String surname, String username, String gender) {
         return dao.modificarUser(password, email, name, telephone, surname, username, gender);
     }
-    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username){
+
+    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
         return dao.checkPayments(cvv, numTarjeta, caducidad, username);
     }
 
@@ -82,15 +83,20 @@ public class Controller {
     public List comboBoxInsert() {
         return dao.comboBoxInsert();
     }
-    
-    public List<Shoe> loadShoes(){
+
+    public List<Shoe> loadShoes() {
         return dao.loadShoes();
     }
-    
-    public Boolean dropShoe(Shoe shoe){
-    return dao.dropShoe(shoe);
+
+    public Boolean dropShoe(Shoe shoe) {
+        return dao.dropShoe(shoe);
     }
-    public Boolean updateStockShoe(Shoe shoe, int stock){
+
+    public Boolean updateStockShoe(Shoe shoe, int stock) {
         return dao.updateStockShoe(shoe, stock);
+    }
+
+    public List<Shoe> getShoesByUser(String username) {
+        return dao.getShoesByUser(username);
     }
 }

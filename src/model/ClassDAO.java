@@ -26,6 +26,7 @@ public interface ClassDAO {
     public List<Shoe> loadShoes();
     public Boolean dropShoe(Shoe shoe);
     public Boolean updateStockShoe (Shoe shoe, int stock);
+    public List<Shoe> getShoesByUser(String username);
   
     List comboBoxInsert();
 }

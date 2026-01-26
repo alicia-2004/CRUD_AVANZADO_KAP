@@ -335,6 +335,11 @@ public class HibernateDBImplementation implements ClassDAO {
         }
     }
 
+    @Override
+    public List<Shoe> getShoesByUser(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
  
 
 }
