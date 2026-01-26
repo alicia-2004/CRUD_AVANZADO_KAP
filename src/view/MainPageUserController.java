@@ -9,8 +9,13 @@ import controller.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,9 +36,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Profile;
@@ -65,6 +74,9 @@ public class MainPageUserController implements Initializable {
     private Controller cont;
     private Profile profile;
     private List<Shoe> shoeList;
+    private int filerState;
+    @FXML
+    private Label lblFIlter;
 
     /**
      * Initializes the controller class.
@@ -102,11 +114,11 @@ public class MainPageUserController implements Initializable {
         //Calculate how many columns 
         shoeList = list;
         if (!shoeList.isEmpty()) {
-            System.out.println("Ha llegado dentro");
+            
             //Calculate how wmany rows
             int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
 
-            for (int i = 0; i > neededRows; i++) {
+            for (int i = 0; i < neededRows; i++) {
                 RowConstraints row = new RowConstraints();
                 row.setPrefHeight(164);
                 gridShoes.getRowConstraints().add(row);
@@ -133,14 +145,49 @@ public class MainPageUserController implements Initializable {
         vbox.setPrefWidth(180);
         vbox.setPrefHeight(200);
         vbox.setStyle("-fx-background-color:white; -fx-border-color:#ddd; -fx-border-radius: 8; -fx-padding: 15;");
+        
+        vbox.setPickOnBounds(true);
 
         vbox.setUserData(shoe);
+        
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem details = new MenuItem("Ver detalles");
+        
+        details.setOnAction(e -> {
+            //Alert
+            Alert detailsAlert = new Alert(Alert.AlertType.INFORMATION);
+            detailsAlert.setTitle("Shoe info");
+            detailsAlert.setHeaderText(shoe.getBrand() + " " + shoe.getModel());
+
+            //SHoe info
+            String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n" 
+                    + "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n"
+                    + "Color: " + shoe.getColor() + "\n"
+                    + "Talla: " + shoe.getOrigin() + "\n"
+                    + "Exclusive: " + shoe.getExclusive();
+
+            detailsAlert.setContentText(info);
+            detailsAlert.showAndWait();
+        });
+        
+        contextMenu.getItems().addAll(details);
+        
+        vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextMenu.show(vbox, event.getScreenX(), event.getScreenY());
+                event.consume(); // Opcional: marca el evento como consumido
+            }
+        });
 
         vbox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Shoe selectedShoe = (Shoe) vbox.getUserData();
-                openNextWindow(selectedShoe);
+                if (event.getButton() == MouseButton.PRIMARY) { //left click to different from right click 
+                    Shoe selectedShoe = (Shoe) vbox.getUserData();
+                    openNextWindow(selectedShoe);
+                }
             }
         });
 
@@ -193,12 +240,13 @@ public class MainPageUserController implements Initializable {
 
     private void openNextWindow(Shoe shoe) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DetallesZapato.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
             Parent root = loader.load();
 
-            //PantallaPablo controller = loader.getController();
+            MenuWindowController controller = loader.getController();
             //controller.setZapato(shoe);
-            //controller.setUsuario(user);
+            controller.setUsuario(profile);
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Buy shoe window");
@@ -236,7 +284,59 @@ public class MainPageUserController implements Initializable {
 
     @FXML
     private void filterByPrice(MouseEvent event) {
-        
+
+        shoeList = cont.loadShoes();
+        List<Shoe> filteredShoe = new ArrayList<>(shoeList);
+
+        switch (filerState) {
+            case 0:  // Ascending order
+                Collections.sort(filteredShoe);
+                lblFIlter.setText("Ascendending");
+                filerState = 1;
+                break;
+
+            case 1:  // Descendending order
+                Collections.sort(filteredShoe, new Comparator<Shoe>() {
+                    @Override
+                    public int compare(Shoe s1, Shoe s2) {
+                        lblFIlter.setText("Descendending");
+                        return s2.compareTo(s1);
+                    }
+                });
+                filerState = 2;
+                break;
+
+            case 2:  // Original order
+                filteredShoe = shoeList;
+                lblFIlter.setText("Original");
+                filerState = 0;
+                break;
+        }
+
+        gridConfiguration();
+        loadShoesToGridPane(filteredShoe);
+    }
+
+    @FXML
+    private void openModifyProfileWindow(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/ModifyWindow.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Modify your profile");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            view.ModifyWindowController controllerWindow = fxmlLoader.getController();
+            controllerWindow.setCont(cont);
+            controllerWindow.setProfile(profile);
+
+            // Close current window
+            Stage currentStage = (Stage) imgFilter.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException ex) {
+            Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

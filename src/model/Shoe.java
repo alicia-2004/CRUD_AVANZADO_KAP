@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "SHOE")
-public class Shoe {
+public class Shoe implements Comparable<Shoe>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -110,7 +110,14 @@ public class Shoe {
     public String toString() {
         return "Shoe{id=" + id + ", model=" + model + ", brand=" + brand + ", price=" + price + "}";
     }
+
+
+    @Override
+    public int compareTo(Shoe otro) {
+        return Double.compare(this.price, otro.price);
+    }
 }
+
 
 enum Exclusive {
     TRUE, FALSE
