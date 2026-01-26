@@ -27,8 +27,8 @@ import javafx.stage.Stage;
 import model.Profile;
 
 /**
- * Controller for the SignUp window.
- * Handles user registration and navigation to login or main menu.
+ * Controller for the SignUp window. Handles user registration and navigation to
+ * login or main menu.
  */
 public class SignUpWindowController implements Initializable {
 
@@ -82,20 +82,28 @@ public class SignUpWindowController implements Initializable {
         String username = textFieldUsername.getText();
         String gender = null;
 
-        if (rButtonM.isSelected()) gender = "Man";
-        else if (rButtonW.isSelected()) gender = "Woman";
-        else if (rButtonO.isSelected()) gender = "Other";
+        if (rButtonM.isSelected()) {
+            gender = "Man";
+        } else if (rButtonW.isSelected()) {
+            gender = "Woman";
+        } else if (rButtonO.isSelected()) {
+            gender = "Other";
+        }
 
-        if (!pass.equals(passC)) throw new passwordequalspassword("No son iguales las contraseñas");
+        if (!pass.equals(passC)) {
+            throw new passwordequalspassword("No son iguales las contraseñas");
+        }
 
         if (cont.signUp(gender, cardN, username, pass, email, name, telephone, surname)) {
             Profile profile = cont.logIn(username, pass);
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                 Parent root = fxmlLoader.load();
-                view.MenuWindowController controllerWindow = fxmlLoader.getController();
-                controllerWindow.setUsuario(profile);
-                controllerWindow.setCont(this.cont);
+
+                view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                controllerWindow.setUser(profile);
+                controllerWindow.setCont(cont);
+
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.show();

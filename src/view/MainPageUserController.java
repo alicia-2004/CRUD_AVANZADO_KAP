@@ -246,6 +246,7 @@ public class MainPageUserController implements Initializable {
             MenuWindowController controller = loader.getController();
             //controller.setZapato(shoe);
             controller.setUsuario(profile);
+            controller.setCont(cont);
             
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
