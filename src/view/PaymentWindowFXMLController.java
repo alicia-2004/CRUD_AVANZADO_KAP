@@ -48,8 +48,8 @@ public class PaymentWindowFXMLController implements Initializable {
         String numTarjeta = textFieldNumTarjeta.getText();
         Date caducidad = (Date) datePickerCaducidad.clone();
         cont.checkPayments(cvv, numTarjeta, caducidad, profile.getUsername());
-        
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

@@ -18,8 +18,7 @@ public class User extends Profile {
     @Column(name = "GENDER", length = 40)
     private String gender;
     
-    /*@OneToOne
-    @JoinColumn(name = "CARD_NUMBER")*/  // FOREIGN OF CARD
+   
     @Column(name = "CARD_NUMBER",  length = 24)
     private String cardNumber;
 

@@ -11,8 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="701.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="view.AddProductController">
+<AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AddProductController">
    <children>
       <Label layoutX="343.0" layoutY="66.0" prefHeight="17.0" prefWidth="57.0" text="Branch" />
       <Label layoutX="513.0" layoutY="66.0" prefHeight="17.0" prefWidth="57.0" text="Model" />
@@ -29,7 +28,7 @@
       <TextField layoutX="343.0" layoutY="272.0" style="-fx-background-radius: 50;" />
       <Label layoutX="343.0" layoutY="254.0" prefHeight="17.0" prefWidth="57.0" text="Price" />
       <RadioButton layoutX="556.0" layoutY="276.0" mnemonicParsing="false" text="Exclusivity" />
-      <Button layoutX="173.0" layoutY="344.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="505.0" style="-fx-background-radius: 50;" text="Add product" />
+      <Button fx:id="paymentButton" layoutX="173.0" layoutY="344.0" mnemonicParsing="false" onAction="#pay" prefHeight="25.0" prefWidth="505.0" style="-fx-background-radius: 50;" text="Buy Product" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a7c4e5" height="396.0" stroke="TRANSPARENT" strokeType="INSIDE" width="149.0" />
       <ComboBox layoutX="343.0" layoutY="86.0" prefWidth="150.0" style="-fx-background-radius: 50;" />
       <ComboBox layoutX="343.0" layoutY="147.0" prefWidth="150.0" style="-fx-background-radius: 50;" />

@@ -252,9 +252,32 @@ public class HibernateDBImplementation implements ClassDAO {
     }
 
     @Override
-    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
+
+    HiloConnection connectionThread = new HiloConnection(30);
+    connectionThread.start();
+
+    try {
+        Session session = waitForHibernateSession(connectionThread);
+
+         String hql = "SELECT c FROM Card c, User u WHERE u.username = :username AND u.cardNumber = c.cardNumber AND c.cardNumber = :numTarjetaAND c.cvv = :cvv AND c.expirationDate = :caducidad";
+
+        Query<Card> query = session.createQuery(hql, Card.class);
+        query.setParameter("username", username);
+        query.setParameter("numTarjeta", numTarjeta);
+        query.setParameter("cvv", cvv);
+        query.setParameter("caducidad", caducidad);
+
+        return !query.list().isEmpty();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        connectionThread.releaseConnection();
     }
+}
+
 
     @Override
     public List<Shoe> loadShoes() {
@@ -339,7 +362,5 @@ public class HibernateDBImplementation implements ClassDAO {
     public List<Shoe> getShoesByUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
- 
 
 }
