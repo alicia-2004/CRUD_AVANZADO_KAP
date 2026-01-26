@@ -1,35 +1,27 @@
 # NetBeans - Archivos del IDE
 nbproject/private/
 nbproject/private/*
-nbproject/project.properties
 nbproject/profiler-configuration.xml
 nbproject/executor.properties
 nbproject/genfiles.properties
 nbproject/build-impl.xml
-nbproject/project.xml
 nbproject/ui.properties
 nbproject/configurations/
 nbproject/private/private.xml
 nbproject/private/private.properties
 nbproject/private/private.properties.*
 nbproject/private/configs/
-nbproject/private/private.properties
+*.orig
 
 # Directorios de build NetBeans
 build/
 nbbuild/
 dist/
 nbdist/
-nbactions.xml
 
 # Archivos de usuario NetBeans
-*.orig
 *.swp
 *.swo
-
-# Archivos de configuración de proyectos NetBeans
-.nb-gradle/
-.nb-maven/
 
 # Archivos temporales NetBeans
 *~
@@ -54,69 +46,5 @@ libs/
 *.log
 logs/
 
-# Archivos del sistema operativo
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-[Dd]esktop.ini
-*.lnk
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-.Spotlight-V100
-.Trashes
-**/.DS_Store
-
-# Linux
-*~
-
-# Directorios de IDEs comunes (adicionales)
-.idea/
-*.iml
-*.ipr
-*.iws
-.vscode/
-.settings/
-.classpath
-.project
-.metadata/
-bin/
-*.class
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Archivos de entorno y configuraciones sensibles
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.key
-*.pem
-*.crt
-
-# Archivos de sistema
-*.bak
-*.backup
-*.old
-*.save
-
-# Directorios de dependencias (si usas Maven/Gradle)
-# target/  # Descomentar si usas Maven
-# .gradle/ # Descomentar si usas Gradle
-# build/   # Descomentar si usas Gradle
-
-# Directorios de node (si es proyecto web)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# NetBeans 12+ adicional (opcional)
+.nb-gradle/

@@ -36,9 +36,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Profile;
@@ -110,7 +114,7 @@ public class MainPageUserController implements Initializable {
         //Calculate how many columns 
         shoeList = list;
         if (!shoeList.isEmpty()) {
-            System.out.println("Ha llegado dentro");
+            
             //Calculate how wmany rows
             int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
 
@@ -141,14 +145,49 @@ public class MainPageUserController implements Initializable {
         vbox.setPrefWidth(180);
         vbox.setPrefHeight(200);
         vbox.setStyle("-fx-background-color:white; -fx-border-color:#ddd; -fx-border-radius: 8; -fx-padding: 15;");
+        
+        vbox.setPickOnBounds(true);
 
         vbox.setUserData(shoe);
+        
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem details = new MenuItem("Ver detalles");
+        
+        details.setOnAction(e -> {
+            //Alert
+            Alert detailsAlert = new Alert(Alert.AlertType.INFORMATION);
+            detailsAlert.setTitle("Shoe info");
+            detailsAlert.setHeaderText(shoe.getBrand() + " " + shoe.getModel());
+
+            //SHoe info
+            String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n" 
+                    + "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n"
+                    + "Color: " + shoe.getColor() + "\n"
+                    + "Talla: " + shoe.getOrigin() + "\n"
+                    + "Exclusive: " + shoe.getExclusive();
+
+            detailsAlert.setContentText(info);
+            detailsAlert.showAndWait();
+        });
+        
+        contextMenu.getItems().addAll(details);
+        
+        vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextMenu.show(vbox, event.getScreenX(), event.getScreenY());
+                event.consume(); // Opcional: marca el evento como consumido
+            }
+        });
 
         vbox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Shoe selectedShoe = (Shoe) vbox.getUserData();
-                openNextWindow(selectedShoe);
+                if (event.getButton() == MouseButton.PRIMARY) { //left click to different from right click 
+                    Shoe selectedShoe = (Shoe) vbox.getUserData();
+                    openNextWindow(selectedShoe);
+                }
             }
         });
 
@@ -201,12 +240,13 @@ public class MainPageUserController implements Initializable {
 
     private void openNextWindow(Shoe shoe) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/DetallesZapato.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
             Parent root = loader.load();
 
-            //PantallaPablo controller = loader.getController();
+            MenuWindowController controller = loader.getController();
             //controller.setZapato(shoe);
-            //controller.setUsuario(user);
+            controller.setUsuario(profile);
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Buy shoe window");
@@ -250,7 +290,7 @@ public class MainPageUserController implements Initializable {
 
         switch (filerState) {
             case 0:  // Ascending order
-                Collections.sort(filteredShoe); 
+                Collections.sort(filteredShoe);
                 lblFIlter.setText("Ascendending");
                 filerState = 1;
                 break;
@@ -260,14 +300,14 @@ public class MainPageUserController implements Initializable {
                     @Override
                     public int compare(Shoe s1, Shoe s2) {
                         lblFIlter.setText("Descendending");
-                        return s2.compareTo(s1); 
+                        return s2.compareTo(s1);
                     }
                 });
                 filerState = 2;
                 break;
 
             case 2:  // Original order
-                filteredShoe = shoeList; 
+                filteredShoe = shoeList;
                 lblFIlter.setText("Original");
                 filerState = 0;
                 break;
