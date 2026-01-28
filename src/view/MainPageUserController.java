@@ -86,6 +86,7 @@ public class MainPageUserController implements Initializable {
 
         if (cont != null) {
             loadShoesToGridPane(cont.loadShoes());
+            System.out.println("lista completa cargada: " + cont.loadShoes());
         }
     }
 
@@ -114,7 +115,7 @@ public class MainPageUserController implements Initializable {
         //Calculate how many columns 
         shoeList = list;
         if (!shoeList.isEmpty()) {
-            
+
             //Calculate how wmany rows
             int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
 
@@ -135,6 +136,8 @@ public class MainPageUserController implements Initializable {
                 gridShoes.add(vbox, column, row);
                 System.out.println("Se ha creado el vbox");
             }
+
+            
         }
 
     }
@@ -145,15 +148,15 @@ public class MainPageUserController implements Initializable {
         vbox.setPrefWidth(180);
         vbox.setPrefHeight(200);
         vbox.setStyle("-fx-background-color:white; -fx-border-color:#ddd; -fx-border-radius: 8; -fx-padding: 15;");
-        
+
         vbox.setPickOnBounds(true);
 
         vbox.setUserData(shoe);
-        
+
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem details = new MenuItem("Ver detalles");
-        
+
         details.setOnAction(e -> {
             //Alert
             Alert detailsAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -161,7 +164,7 @@ public class MainPageUserController implements Initializable {
             detailsAlert.setHeaderText(shoe.getBrand() + " " + shoe.getModel());
 
             //SHoe info
-            String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n" 
+            String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n"
                     + "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n"
                     + "Color: " + shoe.getColor() + "\n"
                     + "Talla: " + shoe.getOrigin() + "\n"
@@ -170,9 +173,9 @@ public class MainPageUserController implements Initializable {
             detailsAlert.setContentText(info);
             detailsAlert.showAndWait();
         });
-        
+
         contextMenu.getItems().addAll(details);
-        
+
         vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
@@ -247,7 +250,7 @@ public class MainPageUserController implements Initializable {
             //controller.setZapato(shoe);
             controller.setUsuario(profile);
             controller.setCont(cont);
-            
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Buy shoe window");
