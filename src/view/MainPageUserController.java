@@ -6,6 +6,8 @@
 package view;
 
 import controller.Controller;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,10 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -28,7 +27,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import model.Shoe;
@@ -45,6 +43,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.PersonalLogger;
 import model.Profile;
 
 /**
@@ -59,10 +58,6 @@ public class MainPageUserController implements Initializable {
     @FXML
     private Menu menuHome;
     @FXML
-    private Menu actionsMenu;
-    @FXML
-    private MenuItem ModifyProfileSubmenu;
-    @FXML
     private Menu menuHelp;
     @FXML
     private TextField searchTextField;
@@ -75,8 +70,16 @@ public class MainPageUserController implements Initializable {
     private Profile profile;
     private List<Shoe> shoeList;
     private int filerState;
+    private PersonalLogger personalLogger;
+    
     @FXML
     private Label lblFIlter;
+    @FXML
+    private Menu menuActions;
+    @FXML
+    private MenuItem menuSettings;
+    @FXML
+    private MenuItem menuReport;
 
     /**
      * Initializes the controller class.
@@ -153,6 +156,7 @@ public class MainPageUserController implements Initializable {
 
         vbox.setUserData(shoe);
 
+        //menu contextual
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem details = new MenuItem("Ver detalles");
@@ -167,7 +171,7 @@ public class MainPageUserController implements Initializable {
             String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n"
                     + "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n"
                     + "Color: " + shoe.getColor() + "\n"
-                    + "Talla: " + shoe.getOrigin() + "\n"
+                    + "Origin: " + shoe.getOrigin() + "\n"
                     + "Exclusive: " + shoe.getExclusive();
 
             detailsAlert.setContentText(info);
@@ -180,7 +184,6 @@ public class MainPageUserController implements Initializable {
             @Override
             public void handle(ContextMenuEvent event) {
                 contextMenu.show(vbox, event.getScreenX(), event.getScreenY());
-                event.consume(); // Opcional: marca el evento como consumido
             }
         });
 
@@ -215,7 +218,7 @@ public class MainPageUserController implements Initializable {
         System.out.println(shoeImgPath);
 
         try {
-            Image img = new Image(getClass().getResourceAsStream(shoeImgPath));
+            Image img = new Image(getClass().getResourceAsStream("../images/" + shoeImgPath));
             imgView.setImage(img);
         } catch (Exception e) {
             Image imgDefault = new Image(getClass().getResourceAsStream("../images/default_shoe.png"));
@@ -257,7 +260,7 @@ public class MainPageUserController implements Initializable {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            personalLogger.logError(e.getMessage());
         }
     }
 
@@ -339,8 +342,21 @@ public class MainPageUserController implements Initializable {
             Stage currentStage = (Stage) imgFilter.getScene().getWindow();
             currentStage.close();
         } catch (IOException ex) {
-            Logger.getLogger(LogInWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            personalLogger.logError(ex.getMessage());
         }
+    }
+
+    @FXML
+    private void openReport(ActionEvent event) {
+        try {
+            Desktop.getDesktop().open(new File("../pdfs/MANUAL_DE_USUARIO.pdf"));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void openManual(ActionEvent event) {
     }
 
 }
