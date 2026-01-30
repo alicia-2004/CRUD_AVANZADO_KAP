@@ -288,11 +288,12 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
         try {
             Session session = waitForHibernateSession(connectionThread);
 
-            String hql = "FROM Shoe";
+            String hql = "SELECT s FROM Shoe s WHERE s.id IN (SELECT MIN(s2.id) FROM Shoe s2 GROUP BY s2.model)";
+            
             Query<Shoe> query = session.createQuery(hql, Shoe.class);
-
+            
             mapShoe = query.list();
-            System.out.println("Esta es la lista" + mapShoe);
+            System.out.println("Hace la peticion" + mapShoe);
 
         } catch (InterruptedException ex) {
             Logger.getLogger(HibernateDBImplementation.class.getName()).log(Level.SEVERE, null, ex);

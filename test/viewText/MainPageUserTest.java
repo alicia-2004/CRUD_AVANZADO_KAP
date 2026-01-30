@@ -39,7 +39,7 @@ public class MainPageUserTest extends ApplicationTest {
         login("jlopez", "pass123");
     }
 
-    private void login(String username, String password) {
+    public void login(String username, String password) {
         clickOn("#TextField_Username");
         write("username");
         clickOn("#PasswordField_Password");
@@ -48,7 +48,7 @@ public class MainPageUserTest extends ApplicationTest {
 
     //all elements are visible
     @Test
-    private void visibleElements() {
+    public void visibleElements() {
 
         //grid
         verifyThat("#gridShoes", isVisible());
@@ -68,7 +68,7 @@ public class MainPageUserTest extends ApplicationTest {
 
     //filter by name
     @Test
-    private void searchTest(){
+    public void searchTest(){
         clickOn("#searchTextField"); 
         write("Nike");
         
@@ -90,7 +90,7 @@ public class MainPageUserTest extends ApplicationTest {
     
     //filter by price functionallity
     @Test
-    private void filterAndClickTest() {
+    public void filterAndClickTest() {
         clickOn("#imgFilter");
 
         //find first vbox to verify if the price is the lower one

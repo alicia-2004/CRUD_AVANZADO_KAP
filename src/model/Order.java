@@ -18,11 +18,11 @@ public class Order {
     @Column(name = "ORDER_ID")
     private int orderId;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "USERNAME")
     private User user;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "SHOE_ID")
     private Shoe shoe;
     
