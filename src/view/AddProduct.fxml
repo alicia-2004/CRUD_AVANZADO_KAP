@@ -9,35 +9,62 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="701.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AddProductController">
+
    <children>
-      <Label layoutX="343.0" layoutY="66.0" prefHeight="17.0" prefWidth="57.0" text="Branch" />
+
+      <Label layoutX="343.0" layoutY="66.0" prefHeight="17.0" prefWidth="57.0" text="Brand" />
       <Label layoutX="513.0" layoutY="66.0" prefHeight="17.0" prefWidth="57.0" text="Model" />
-      <TextField layoutX="513.0" layoutY="86.0" style="-fx-background-radius: 50;" />
       <Label layoutX="343.0" layoutY="128.0" prefHeight="17.0" prefWidth="57.0" text="Size" />
-      <TextField layoutX="513.0" layoutY="147.0" style="-fx-background-radius: 50;" />
       <Label layoutX="513.0" layoutY="128.0" prefHeight="17.0" prefWidth="57.0" text="Color" />
-      <TextField layoutX="184.0" layoutY="272.0" prefHeight="25.0" prefWidth="113.0" style="-fx-background-radius: 50;" />
-      <Label layoutX="184.0" layoutY="254.0" prefHeight="17.0" prefWidth="57.0" text="Date" />
-      <TextField layoutX="343.0" layoutY="210.0" style="-fx-background-radius: 50;" />
       <Label layoutX="344.0" layoutY="193.0" prefHeight="17.0" prefWidth="91.0" text="Made in" />
-      <TextField layoutX="513.0" layoutY="210.0" style="-fx-background-radius: 50;" />
       <Label layoutX="513.0" layoutY="193.0" prefHeight="17.0" prefWidth="57.0" text="Stock" />
-      <TextField layoutX="343.0" layoutY="272.0" style="-fx-background-radius: 50;" />
       <Label layoutX="343.0" layoutY="254.0" prefHeight="17.0" prefWidth="57.0" text="Price" />
-      <RadioButton layoutX="556.0" layoutY="276.0" mnemonicParsing="false" text="Exclusivity" />
-      <Button fx:id="paymentButton" layoutX="173.0" layoutY="344.0" mnemonicParsing="false" onAction="#pay" prefHeight="25.0" prefWidth="505.0" style="-fx-background-radius: 50;" text="Buy Product" />
+      <Label layoutX="184.0" layoutY="254.0" prefHeight="17.0" prefWidth="57.0" text="Date" />
+      <Label layoutX="184.0" layoutY="193.0" prefHeight="17.0" prefWidth="120.0" text="Image path" />
+
+
+      <ComboBox fx:id="cmbBrand" layoutX="343.0" layoutY="86.0" prefWidth="150.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtModel" layoutX="513.0" layoutY="86.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtSize" layoutX="343.0" layoutY="147.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtColor" layoutX="513.0" layoutY="147.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtOrigin" layoutX="343.0" layoutY="210.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtStock" layoutX="513.0" layoutY="210.0" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtPrice" layoutX="343.0" layoutY="272.0" style="-fx-background-radius: 50;" />
+
+
+      <TextField fx:id="txtDate" layoutX="184.0" layoutY="272.0" prefHeight="25.0" prefWidth="113.0" promptText="YYYY-MM-DD" style="-fx-background-radius: 50;" />
+
+      <TextField fx:id="txtImgPath" layoutX="184.0" layoutY="210.0" prefHeight="26.0" prefWidth="135.0" promptText="../images/default_shoe.png" style="-fx-background-radius: 50;" />
+
+      <RadioButton fx:id="rbExclusive" layoutX="556.0" layoutY="276.0" mnemonicParsing="false" text="Exclusivity" />
+
+
+      <Button fx:id="btnAddProduct" layoutX="173.0" layoutY="344.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="25.0" prefWidth="505.0" style="-fx-background-radius: 50; -fx-background-color: #5081b3;" text="Add Product" />
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a7c4e5" height="396.0" stroke="TRANSPARENT" strokeType="INSIDE" width="149.0" />
-      <ComboBox layoutX="343.0" layoutY="86.0" prefWidth="150.0" style="-fx-background-radius: 50;" />
-      <ComboBox layoutX="343.0" layoutY="147.0" prefWidth="150.0" style="-fx-background-radius: 50;" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ed90e5" height="44.0" layoutX="14.0" layoutY="31.0" stroke="TRANSPARENT" strokeType="INSIDE" width="122.0" />
       <Text layoutX="59.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGO" />
+
       <ImageView fitHeight="128.0" fitWidth="135.0" layoutX="173.0" layoutY="35.0">
          <image>
             <Image url="@../images/nike.jpg" />
          </image>
       </ImageView>
+      <Button layoutX="611.0" layoutY="19.0" mnemonicParsing="false" onAction="#onBack" prefHeight="26.0" prefWidth="58.0" style="-fx-background-radius: 10; -fx-background-color: #5081b3;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+
    </children>
 </AnchorPane>

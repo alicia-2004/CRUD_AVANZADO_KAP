@@ -363,5 +363,61 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
     public List<Shoe> getShoesByUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin){
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        
+        List<Shoe> result = new ArrayList<>();
+        
+        try{
+            Session session = waitForHibernateSession(connectionThread);
+            String hql = "FROM Shoe s " +
+                 "WHERE s.brand = :brand AND s.model = :model " +
+                 "AND s.color = :color AND s.origin = :origin " +
+                 "ORDER BY s.size ASC";
+
+            Query<Shoe> query = session.createQuery(hql, Shoe.class);
+            query.setParameter("brand", brand);
+            query.setParameter("model", model);
+            query.setParameter("color", color);
+            query.setParameter("origin", origin);
+
+            result = query.list();
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        finally{
+            connectionThread.releaseConnection();
+        } 
+        return result;
+    }
+    
+    @Override
+    public Boolean addShoe(Shoe shoe) {
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        Transaction tx = null;
+
+        try {
+            Session session = waitForHibernateSession(connectionThread);
+            tx = session.beginTransaction();
+
+            session.save(shoe);
+
+            tx.commit();
+            return true;
+
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            connectionThread.releaseConnection();
+        }
+    }
+
 
 }

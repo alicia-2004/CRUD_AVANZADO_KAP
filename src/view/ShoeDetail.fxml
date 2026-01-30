@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ShoeDetailController">
 
@@ -87,29 +88,18 @@
                </children>
             </FlowPane>
 
-            <!-- SHOE DETAIL -->
             <ScrollPane fitToWidth="true" prefHeight="423.0" prefWidth="498.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="474.0">
                      <children>
-
-                        <!-- Card -->
                         <VBox alignment="TOP_CENTER" layoutX="20.0" layoutY="20.0" prefWidth="430.0" spacing="12.0" style="-fx-background-color: #f7f7f7; -fx-background-radius: 18; -fx-padding: 26;">
 
-                           <!-- Imagen izquierda + columna derecha (todo en vertical) -->
                            <HBox alignment="TOP_LEFT" spacing="24.0">
 
-                              <!-- Imagen -->
                               <ImageView fx:id="imgShoe" fitHeight="160.0" fitWidth="146.0" preserveRatio="true">
-                                 <!-- Si quieres ver imagen en SceneBuilder, descomenta y pon ruta real -->
-                                 <!--
-                                 <image>
-                                    <Image url="@../images/tu_zapatilla.png" />
-                                 </image>
-                                 -->
+
                               </ImageView>
 
-                              <!-- Columna derecha -->
                               <VBox alignment="TOP_LEFT" prefWidth="220.0" spacing="10.0">
 
                                  <Label fx:id="lblName" style="-fx-font-size: 26px; -fx-font-weight: bold;" text="Caven" />
@@ -131,6 +121,11 @@
                               </VBox>
                            </HBox>
                         </VBox>
+                        <Button layoutX="427.0" layoutY="6.0" mnemonicParsing="false" style="-fx-background-color: black; -fx-background-radius: 20;" text="Back" onAction="#onBack" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
 
                      </children>
                   </AnchorPane>

@@ -119,10 +119,4 @@ public class Shoe implements Comparable<Shoe>{
 }
 
 
-enum Exclusive {
-    TRUE, FALSE
-}
 
-enum Reserved {
-    TRUE, FALSE
-}

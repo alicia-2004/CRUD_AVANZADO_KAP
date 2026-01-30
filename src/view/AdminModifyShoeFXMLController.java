@@ -6,18 +6,27 @@
 package view;
 
 import controller.Controller;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import model.Profile;
 import model.Shoe;
@@ -49,6 +58,16 @@ public class AdminModifyShoeFXMLController implements Initializable {
     private ObservableList<Shoe> listShoe;
     private Controller cont;
     private Profile profile;
+    @FXML
+    private MenuBar menu;
+    @FXML
+    private Menu menuHome;
+    @FXML
+    private Menu actionsMenu;
+    @FXML
+    private MenuItem ModifyProfileSubmenu;
+    @FXML
+    private Menu menuHelp;
 
     public Controller getCont() {
         return cont;
@@ -100,6 +119,30 @@ public class AdminModifyShoeFXMLController implements Initializable {
 
         if (cont.dropShoe(selectedShoe)) {
             listShoe.remove(selectedShoe);
+        }
+    }
+    @FXML
+    public void addNew() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddProduct.fxml"));
+            Parent root = loader.load();
+
+            AddProductController addCtrl = loader.getController();
+            addCtrl.setCont(cont);
+            addCtrl.setProfile(profile);
+
+            Stage stage = new Stage();
+            stage.setTitle("Add new shoe");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+
+            stage.showAndWait();
+
+            loadShoes();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

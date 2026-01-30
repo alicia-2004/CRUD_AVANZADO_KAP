@@ -99,4 +99,15 @@ public class Controller {
     public List<Shoe> getShoesByUser(String username) {
         return dao.getShoesByUser(username);
     }
+    public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin){
+        return dao.loadShoeVariants(brand, model, color, origin);
+    }
+    public List<Shoe> loadShoeVariants(Shoe shoe) {
+        return loadShoeVariants(shoe.getBrand(), shoe.getModel(), shoe.getColor(), shoe.getOrigin());
+    }
+     public Boolean addShoe(Shoe shoe){
+         return dao.addShoe(shoe);
+     }
+
+
 }
