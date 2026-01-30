@@ -246,23 +246,28 @@ public class MainPageUserController implements Initializable {
 
     private void openNextWindow(Shoe shoe) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MenuWindow.fxml"));
-            Parent root = loader.load();
-
-            MenuWindowController controller = loader.getController();
-            //controller.setZapato(shoe);
-            controller.setUsuario(profile);
-            controller.setCont(cont);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/ShoeDetail.fxml"));
+            Parent root = fxmlLoader.load();
 
             Stage stage = new Stage();
+            stage.setTitle("Shoe Detail");
             stage.setScene(new Scene(root));
-            stage.setTitle("Buy shoe window");
             stage.show();
 
-        } catch (IOException e) {
-            personalLogger.logError(e.getMessage());
+            ShoeDetailController controller = fxmlLoader.getController();
+            controller.setCont(cont);
+            controller.setUser(profile);
+            controller.setShoe(shoe);
+
+         
+            Stage currentStage = (Stage) gridShoes.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
+
 
     //filter
     @FXML
