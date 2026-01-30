@@ -288,6 +288,29 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
         try {
             Session session = waitForHibernateSession(connectionThread);
 
+            String hql = "FROM Shoe";
+            
+            Query<Shoe> query = session.createQuery(hql, Shoe.class);
+            
+            mapShoe = query.list();
+            System.out.println("Hace la peticion" + mapShoe);
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(HibernateDBImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return mapShoe;
+    }
+    
+    @Override
+    public List<Shoe> loadModels() {
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        List<Shoe> mapShoe = new ArrayList<>();
+
+        try {
+            Session session = waitForHibernateSession(connectionThread);
+
             String hql = "SELECT s FROM Shoe s WHERE s.id IN (SELECT MIN(s2.id) FROM Shoe s2 GROUP BY s2.model)";
             
             Query<Shoe> query = session.createQuery(hql, Shoe.class);
@@ -301,6 +324,7 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
 
         return mapShoe;
     }
+    
 
     @Override
     public Boolean dropShoe(Shoe shoe) {

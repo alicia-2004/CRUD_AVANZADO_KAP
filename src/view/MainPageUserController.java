@@ -88,7 +88,7 @@ public class MainPageUserController implements Initializable {
         this.cont = cont;
 
         if (cont != null) {
-            loadShoesToGridPane(cont.loadShoes());
+            loadShoesToGridPane(cont.loadModels());
             System.out.println("lista completa cargada: " + cont.loadShoes());
         }
     }
@@ -275,7 +275,7 @@ public class MainPageUserController implements Initializable {
         if (event.getCode() == KeyCode.ENTER) {
             String textToSearch = searchTextField.getText();
             List<Shoe> filteredShoe = new ArrayList<>();
-            shoeList = cont.loadShoes();
+            shoeList = cont.loadModels();
 
             if (textToSearch != "") {
                 for (Shoe shoe : shoeList) {
