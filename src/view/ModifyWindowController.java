@@ -73,12 +73,12 @@ public class ModifyWindowController implements Initializable {
         String gender = "";
         String username;
         String email;
-        
+
         // obtener el genero actual si es un User
         if (profile instanceof User) {
             gender = ((User) profile).getGender();
         }
-        
+
         username = profile.getUsername();
         email = profile.getEmail();
 
@@ -91,10 +91,10 @@ public class ModifyWindowController implements Initializable {
         if (telephone == null || telephone.isEmpty() || telephone.equals("Insert your new telephone")) {
             telephone = profile.getTelephone();
         }
-        if (newPass == null || newPass.isEmpty() || cNewPass == null || cNewPass.isEmpty() || 
-            newPass.equals("New Password") || cNewPass.equals("Confirm New Password")) {
+        if (newPass == null || newPass.isEmpty() || cNewPass == null || cNewPass.isEmpty()
+                || newPass.equals("New Password") || cNewPass.equals("Confirm New Password")) {
             newPass = profile.getPassword();
-            
+
             Boolean success = cont.modificarUser(newPass, email, name, telephone, surname, username, gender);
             if (success) {
                 // actualizar el objeto profile con los nuevos valores
@@ -102,13 +102,13 @@ public class ModifyWindowController implements Initializable {
                 profile.setSurname(surname);
                 profile.setTelephone(telephone);
                 profile.setPassword(newPass);
-                
+
                 javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Success");
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("User data has been successfully updated.");
                 successAlert.showAndWait();
-                
+
                 try {
                     javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                     javafx.scene.Parent root = fxmlLoader.load();
@@ -144,13 +144,13 @@ public class ModifyWindowController implements Initializable {
                     profile.setSurname(surname);
                     profile.setTelephone(telephone);
                     profile.setPassword(newPass);
-                    
+
                     javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Success");
                     successAlert.setHeaderText(null);
                     successAlert.setContentText("User data has been successfully updated.");
                     successAlert.showAndWait();
-                    
+
                     try {
                         javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
                         javafx.scene.Parent root = fxmlLoader.load();
@@ -184,20 +184,35 @@ public class ModifyWindowController implements Initializable {
     @FXML
     private void cancel() {
         try {
-            javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
-            javafx.scene.Parent root = fxmlLoader.load();
+            if (profile instanceof User) {
+                javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainPageUser.fxml"));
+                javafx.scene.Parent root = fxmlLoader.load();
 
-            view.MainPageUserController controllerWindow = fxmlLoader.getController();
-            controllerWindow.setUser(profile);
-            controllerWindow.setCont(this.cont);
+                view.MainPageUserController controllerWindow = fxmlLoader.getController();
+                controllerWindow.setUser(profile);
+                controllerWindow.setCont(this.cont);
 
-            Stage stage = new Stage();
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
+                Stage stage = new Stage();
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.show();
 
-            Stage currentStage = (Stage) Button_Cancel.getScene().getWindow();
-            currentStage.close();
+                Stage currentStage = (Stage) Button_Cancel.getScene().getWindow();
+                currentStage.close();
+            }else{
+                 javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/AdminModifyShoeFXML.fxml"));
+                javafx.scene.Parent root = fxmlLoader.load();
 
+                view.AdminModifyShoeFXMLController controllerWindow = fxmlLoader.getController();
+                controllerWindow.setProfile(profile);
+                controllerWindow.setCont(this.cont);
+
+                Stage stage = new Stage();
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.show();
+
+                Stage currentStage = (Stage) Button_Cancel.getScene().getWindow();
+                currentStage.close();
+            }
         } catch (IOException ex) {
             Logger.getLogger(MenuWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
