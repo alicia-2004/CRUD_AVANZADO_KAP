@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -165,6 +166,7 @@ public class AdminModifyShoeFXMLController implements Initializable {
         Integer newStock = event.getNewValue();
 
         if (newStock < 0) {
+            showInfo("You cannot enter negative stock;, ensure that the stock is greater than 0.");
             tableShoe.refresh();
             return;
         }
@@ -206,5 +208,12 @@ public class AdminModifyShoeFXMLController implements Initializable {
     private void openManual(ActionEvent event) {
     }
 
+    private void showInfo(String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Error modifying stock");
+        a.setHeaderText(null);
+        a.setContentText(msg);
+        a.showAndWait();
+    }
 
 }
