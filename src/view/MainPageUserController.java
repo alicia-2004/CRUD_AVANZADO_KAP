@@ -303,7 +303,7 @@ public class MainPageUserController implements Initializable {
         switch (filerState) {
             case 0:  // Ascending order
                 Collections.sort(filteredShoe);
-                lblFIlter.setText("Ascendending");
+                lblFIlter.setText("Ascending");
                 filerState = 1;
                 break;
 
@@ -311,7 +311,7 @@ public class MainPageUserController implements Initializable {
                 Collections.sort(filteredShoe, new Comparator<Shoe>() {
                     @Override
                     public int compare(Shoe s1, Shoe s2) {
-                        lblFIlter.setText("Descendending");
+                        lblFIlter.setText("Descending");
                         return s2.compareTo(s1);
                     }
                 });

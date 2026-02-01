@@ -76,12 +76,12 @@ public class ShoeDetailController {
 
     private void paintBaseInfo(Shoe s) {
         if (s == null) return;
-
+        System.out.println(s.getImgPath());
         lblName.setText(s.getBrand() + " " + s.getModel());
         lblSubtitle.setText(s.getColor() + " (" + s.getOrigin() + ")");
         lblPrice.setText(String.format("€%.2f", s.getPrice()));
 
-        setImageSafe(s.getImgPath());
+        setImageSafe("../images/" + s.getImgPath());
     }
     private void fillSizesComboAndSelectInitial(double initialSize) {
         cmbSize.getItems().clear();
