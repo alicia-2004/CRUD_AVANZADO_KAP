@@ -8,23 +8,34 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import model.PersonalLogger;
 import model.Profile;
 import model.Shoe;
 
 public class ShoeDetailController {
 
-    @FXML private ImageView imgShoe;
-    @FXML private Label lblName;
-    @FXML private Label lblSubtitle;
-    @FXML private Label lblPrice;
-    @FXML private Label lblStock;
-    @FXML private ComboBox<Double> cmbSize;
-
+    @FXML
+    private ImageView imgShoe;
+    @FXML
+    private Label lblName;
+    @FXML
+    private Label lblSubtitle;
+    @FXML
+    private Label lblPrice;
+    @FXML
+    private Label lblStock;
+    @FXML
+    private ComboBox<Double> cmbSize;
+    @FXML
+    private Button buyProductButton;
+    
+    private PersonalLogger personalLogger;
     private Controller cont;
     private Profile profile;
     private Shoe shoe;
@@ -39,7 +50,7 @@ public class ShoeDetailController {
         this.profile = profile;
     }
 
-   public void setShoe(Shoe shoe) {
+    public void setShoe(Shoe shoe) {
         this.shoe = shoe;
 
         variants = cont.loadShoeVariants(shoe);
@@ -56,7 +67,6 @@ public class ShoeDetailController {
             );
             Parent root = loader.load();
 
-
             MainPageUserController mainCtrl = loader.getController();
             mainCtrl.setCont(cont);
             mainCtrl.setUser(profile);
@@ -72,10 +82,10 @@ public class ShoeDetailController {
         }
     }
 
-
-
     private void paintBaseInfo(Shoe s) {
-        if (s == null) return;
+        if (s == null) {
+            return;
+        }
 
         lblName.setText(s.getBrand() + " " + s.getModel());
         lblSubtitle.setText(s.getColor() + " (" + s.getOrigin() + ")");
@@ -83,6 +93,7 @@ public class ShoeDetailController {
 
         setImageSafe(s.getImgPath());
     }
+
     private void fillSizesComboAndSelectInitial(double initialSize) {
         cmbSize.getItems().clear();
 
@@ -101,7 +112,8 @@ public class ShoeDetailController {
         });
         cmbSize.getSelectionModel().select(initialSize);
         selectVariantBySize(initialSize);
-    }   
+    }
+
     private void selectVariantBySize(double size) {
         selectedVariant = null;
 
@@ -119,8 +131,8 @@ public class ShoeDetailController {
 
         lblStock.setText(selectedVariant.getStock() + " Units in stock");
     }
-    
-   private void setImageSafe(String path) {
+
+    private void setImageSafe(String path) {
         try {
             Image img = new Image(getClass().getResourceAsStream(path));
             imgShoe.setImage(img);
@@ -130,7 +142,26 @@ public class ShoeDetailController {
         }
     }
 
+    @FXML
+    private void buyProductss(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PaymentWindowFXML.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Modify your profile");
+            stage.setScene(new Scene(root));
+            stage.show();
 
+            view.PaymentWindowFXMLController controllerWindow = fxmlLoader.getController();
+            controllerWindow.setCont(cont);
+            controllerWindow.setUsuario(profile);
 
+            // Close current window
+            Stage currentStage = (Stage) buyProductButton.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException ex) {
+            personalLogger.logError(ex.getMessage());
+        }
+    }
 
 }
