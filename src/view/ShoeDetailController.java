@@ -91,7 +91,7 @@ public class ShoeDetailController {
         lblSubtitle.setText(s.getColor() + " (" + s.getOrigin() + ")");
         lblPrice.setText(String.format("€%.2f", s.getPrice()));
 
-        setImageSafe(s.getImgPath());
+        setImageSafe("../images/" + s.getImgPath());
     }
 
     private void fillSizesComboAndSelectInitial(double initialSize) {

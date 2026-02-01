@@ -121,7 +121,7 @@
                               </VBox>
                            </HBox>
                         </VBox>
-                        <Button layoutX="427.0" layoutY="6.0" mnemonicParsing="false" onAction="#onBack" style="-fx-background-color: black; -fx-background-radius: 20;" text="Back" textFill="WHITE">
+                        <Button fx:id="btnBack" layoutX="427.0" layoutY="6.0" mnemonicParsing="false" onAction="#onBack" style="-fx-background-color: black; -fx-background-radius: 20;" text="Back" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
