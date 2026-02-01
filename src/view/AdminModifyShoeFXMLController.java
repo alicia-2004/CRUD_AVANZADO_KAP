@@ -9,7 +9,10 @@ import controller.Controller;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -289,14 +292,31 @@ public class AdminModifyShoeFXMLController implements Initializable {
     @FXML
     private void openReport(ActionEvent event) {
         try {
-            Desktop.getDesktop().open(new File("../pdfs/MANUAL_DE_USUARIO.pdf"));
+            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
+            if (!pdf.exists()) {
+                System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
+                return;
+            }
+            Desktop.getDesktop().open(pdf);
+
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void openManual(ActionEvent event) {
+        try {
+            File pdf = new File("pdfs/INFORME DIN.pdf");
+            if (!pdf.exists()) {
+                System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
+                return;
+            }
+            Desktop.getDesktop().open(pdf);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
