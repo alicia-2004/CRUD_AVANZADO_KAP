@@ -62,3 +62,31 @@ BEGIN
  END //
 
 DELIMITER ; 
+
+CREATE PROCEDURE InsertarPedido(IN p_username VARCHAR(30), IN p_shoe_id INT, IN p_date DATE, IN p_quantity INT)
+BEGIN
+    DECLARE current_stock INT;
+    DECLARE new_stock INT;
+    
+    SELECT STOCK INTO current_stock 
+    FROM SHOE 
+    WHERE SHOE_ID = p_shoe_id;
+    
+    IF current_stock >= p_quantity THEN
+        SET new_stock = current_stock - p_quantity;
+        
+        UPDATE SHOE 
+        SET STOCK = new_stock 
+        WHERE SHOE_ID = p_shoe_id;
+        
+        INSERT INTO ORDER_ (USERNAME, SHOE_ID, DATE_, QUANTITY)
+        VALUES (p_username, p_shoe_id, p_date, p_quantity);
+        
+        SELECT 'Order done' AS Mensaje;
+    ELSE
+        SELECT 'Error: Not enought stock' AS Mensaje;
+    END IF;
+    
+END //
+
+DELIMITER ;
