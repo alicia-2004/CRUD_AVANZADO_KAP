@@ -143,7 +143,7 @@ public class ShoeDetailController {
     }
 
     @FXML
-    private void buyProductss(ActionEvent event) {
+    private void buyProduct(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PaymentWindowFXML.fxml"));
             Parent root = fxmlLoader.load();

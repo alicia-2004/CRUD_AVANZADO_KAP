@@ -19,13 +19,17 @@ import java.util.Date;
 public class PersonalLogger {
     private ArrayList<String> logMensajes;
     
+    public PersonalLogger() {
+        logMensajes = new ArrayList<>();
+    }
+    
      public void logMessage(String mensaje) {
         File fichLogs = new File("logs.dat");
         String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - *MENSAJE INFORMATIVO*:" + mensaje;
         logMensajes.add(logGuardado);
 
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichLogs));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichLogs, true));
             oos.writeObject(logGuardado);
             oos.close();
         } catch (Exception e) {
@@ -36,18 +40,18 @@ public class PersonalLogger {
     }
      
      public void logError(String mensaje) {
-        File fichLogs = new File("logs.dat");
+        File fichLogs = new File("errors.dat");
         String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - *INFORMACIÓN ERROR*: " + mensaje;
         logMensajes.add(logGuardado);
 
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichLogs));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichLogs, true));
             oos.writeObject(logGuardado);
             oos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+         System.out.println("llega al log");
         System.out.println(logGuardado);
     }
 }
