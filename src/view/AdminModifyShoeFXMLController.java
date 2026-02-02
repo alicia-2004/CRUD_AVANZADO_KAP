@@ -25,10 +25,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -40,11 +42,11 @@ import model.Profile;
 import model.Shoe;
 
 /**
- * Controller class for the Admin Modify Shoe view.
+ * FXML controller for the Admin Shoe Management view.
  * <p>
- * This JavaFX controller manages the administration interface that allows an
- * administrator to view, add, delete and modify shoe data. It also provides
- * access to profile modification and help documentation.
+ * This class allows an administrator to view, add, delete, and modify shoes. It
+ * also handles user profile modification and opening system manuals or reports
+ * in PDF format.
  * </p>
  *
  * @author Deusto
@@ -76,7 +78,7 @@ public class AdminModifyShoeFXMLController implements Initializable {
     private TableColumn<Shoe, Integer> columnStock;
 
     /**
-     * Button used to delete a selected shoe.
+     * Buttons used to delete and add selected shoe.
      */
     @FXML
     private Button deleteButton;
@@ -159,22 +161,22 @@ public class AdminModifyShoeFXMLController implements Initializable {
     }
 
     /**
-     * Initializes the controller class.
+     * Initializes the controller.
      * <p>
-     * This method is automatically called after the FXML file has been loaded.
-     * It configures the table columns, enables editing, and sets up stock
-     * modification handling.
+     * This method is automatically called after the FXML file is loaded. It
+     * configures the table columns, enables editing, and sets up stock editing
+     * handling. It also adds a context menu to each row for adding or editing
+     * shoes.
      * </p>
      *
-     * @param url the location used to resolve relative paths
-     * @param rb the resources used to localize the root object
+     * @param url location used to resolve relative paths
+     * @param rb resources used to localize the root object
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tableShoe.setEditable(true);
         listShoe = FXCollections.observableArrayList();
 
-        // Enlazar columnas con atributos del modelo
         columnBrand.setCellValueFactory(new PropertyValueFactory<>("brand"));
         columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
         columnColor.setCellValueFactory(new PropertyValueFactory<>("color"));
@@ -185,6 +187,25 @@ public class AdminModifyShoeFXMLController implements Initializable {
                 TextFieldTableCell.forTableColumn(new IntegerStringConverter())
         );
         columnStock.setOnEditCommit(this::onStockEdit);
+        tableShoe.setRowFactory(tv -> {
+            TableRow<Shoe> row = new TableRow<>();
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addEditItem = new MenuItem("Add shoe");
+            addEditItem.setOnAction(event -> {
+                Shoe clickedShoe = row.getItem();
+                openAddShoeWindow(clickedShoe);
+            });
+            contextMenu.getItems().add(addEditItem);
+
+            row.setOnContextMenuRequested(event -> {
+                if (!row.isEmpty()) {
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
+
+            return row;
+        });
 
     }
 
@@ -237,12 +258,12 @@ public class AdminModifyShoeFXMLController implements Initializable {
     }
 
     /**
-     * Handles stock value editing from the table.
+     * Handles stock editing from the table.
      * <p>
-     * Prevents negative values and updates the stock through the controller.
+     * Prevents negative values and updates the stock using the controller.
      * </p>
      *
-     * @param event the edit event containing the new stock value
+     * @param event the cell edit event
      */
     private void onStockEdit(
             TableColumn.CellEditEvent<Shoe, Integer> event
@@ -260,9 +281,9 @@ public class AdminModifyShoeFXMLController implements Initializable {
     }
 
     /**
-     * Opens the window that allows the user to modify their profile.
+     * Opens the window to modify the current user profile.
      *
-     * @param event the action event triggered by the menu item
+     * @param event the action event triggered by the menu
      */
     @FXML
     private void openModifyProfileWindow(ActionEvent event) {
@@ -306,6 +327,11 @@ public class AdminModifyShoeFXMLController implements Initializable {
         }
     }
 
+    /**
+     * Opens the system manual PDF using the default PDF viewer.
+     *
+     * @param event the action event triggered by the menu
+     */
     @FXML
     private void openManual(ActionEvent event) {
         try {
@@ -332,6 +358,34 @@ public class AdminModifyShoeFXMLController implements Initializable {
         a.setHeaderText(null);
         a.setContentText(msg);
         a.showAndWait();
+    }
+
+    /**
+     * Opens a window to add or edit a shoe.
+     *
+     * @param shoe the shoe to add or edit
+     */
+    private void openAddShoeWindow(Shoe shoe) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddProduct.fxml"));
+            Parent root = loader.load();
+
+            AddProductController addProduct = loader.getController();
+            addProduct.setCont(cont);
+            addProduct.setProfile(profile);
+
+            Stage stage = new Stage();
+            stage.setTitle("Add");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            loadShoes();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
