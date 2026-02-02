@@ -23,7 +23,7 @@ VALUES
 ('rluna', 'CTA-002');
 
 INSERT INTO SHOE 
-(PRICE, MODEL, SIZE, EXCLUSIVE, MANUFACTER_DATE, COLOR, ORIGIN, BRAND, RESERVED, STOCK, IMG_FILE)
+(PRICE, MODEL, SIZE, EXCLUSIVE, MANUFACTER_DATE, COLOR, ORIGIN, BRAND, RESERVED, STOCK, IMGPATH)
 VALUES
 (79.99, 'Air Max', 42, 'FALSE', '2024-01-10', 'Negro', 'España', 'Nike', 'FALSE', 50, 'nike_airmax90_negras.jpg'),
 (120.50, 'Samba', 40, 'TRUE', '2023-11-05', 'Negro', 'Italia', 'Adidas', 'FALSE', 30, 'adidas_samba_negras.jpg'),
@@ -62,31 +62,3 @@ BEGIN
  END //
 
 DELIMITER ; 
-
-CREATE PROCEDURE InsertarPedido(IN p_username VARCHAR(30), IN p_shoe_id INT, IN p_date DATE, IN p_quantity INT)
-BEGIN
-    DECLARE current_stock INT;
-    DECLARE new_stock INT;
-    
-    SELECT STOCK INTO current_stock 
-    FROM SHOE 
-    WHERE SHOE_ID = p_shoe_id;
-    
-    IF current_stock >= p_quantity THEN
-        SET new_stock = current_stock - p_quantity;
-        
-        UPDATE SHOE 
-        SET STOCK = new_stock 
-        WHERE SHOE_ID = p_shoe_id;
-        
-        INSERT INTO ORDER_ (USERNAME, SHOE_ID, DATE_, QUANTITY)
-        VALUES (p_username, p_shoe_id, p_date, p_quantity);
-        
-        SELECT 'Order done' AS Mensaje;
-    ELSE
-        SELECT 'Error: Not enought stock' AS Mensaje;
-    END IF;
-    
-END //
-
-DELIMITER ;
