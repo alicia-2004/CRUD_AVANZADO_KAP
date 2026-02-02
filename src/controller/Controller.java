@@ -109,5 +109,8 @@ public class Controller {
          return dao.addShoe(shoe);
      }
 
+     public List<Shoe> loadModels(){
+         return dao.loadModels();
+     }
 
 }

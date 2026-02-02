@@ -1,7 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * FXML Controller class for the main user page.
+ * This class handles the user interface logic for the main page where users can
+ * view, search, and filter shoes. It manages the display of shoes in a grid layout,
+ * provides filtering by brand and price, and handles navigation to detailed views
+ * and other application windows.
+ * 
+ * @author 2dami
  */
 package view;
 
@@ -47,61 +51,105 @@ import model.PersonalLogger;
 import model.Profile;
 
 /**
- * FXML Controller class
- *
- * @author 2dami
+ * MainPageUserController implements the user interface logic for the main page
+ * where shoes are displayed, filtered, and selected for detailed viewing.
  */
 public class MainPageUserController implements Initializable {
 
+    /** Menu bar component for application navigation */
     @FXML
     private MenuBar menu;
+    
+    /** Home menu item */
     @FXML
     private Menu menuHome;
+    
+    /** Help menu item */
     @FXML
     private Menu menuHelp;
+    
+    /** Text field for searching shoes by brand */
     @FXML
     private TextField searchTextField;
+    
+    /** Image view for price filter button */
     @FXML
     private ImageView imgFilter;
+    
+    /** Grid pane for displaying shoes in a 2-column layout */
     @FXML
     private GridPane gridShoes;
-
-    private Controller cont;
-    private Profile profile;
-    private List<Shoe> shoeList;
-    private int filerState;
-    private PersonalLogger personalLogger;
     
+    /** Label displaying the current filter state */
     @FXML
     private Label lblFIlter;
+    
+    /** Actions menu containing user settings */
     @FXML
     private Menu menuActions;
+    
+    /** Menu item for opening profile modification window */
     @FXML
     private MenuItem menuSettings;
+    
+    /** Menu item for opening reports */
     @FXML
     private MenuItem menuReport;
 
+    /** Application controller for business logic */
+    private Controller cont;
+    
+    /** Current user profile */
+    private Profile profile;
+    
+    /** List of shoes to display */
+    private List<Shoe> shoeList;
+    
+    /** Current state of the price filter (0=Original, 1=Ascending, 2=Descending) */
+    private int filerState;
+    
+    /** Logger for error tracking */
+    private PersonalLogger personalLogger;
+
     /**
-     * Initializes the controller class.
+     * Sets the application controller and loads shoes into the grid.
+     * 
+     * @param cont the application controller to set
      */
     public void setCont(Controller cont) {
         this.cont = cont;
 
         if (cont != null) {
-            loadShoesToGridPane(cont.loadShoes());
+            loadShoesToGridPane(cont.loadModels());
             System.out.println("lista completa cargada: " + cont.loadShoes());
         }
     }
 
+    /**
+     * Sets the current user profile.
+     * 
+     * @param profile the user profile to set
+     */
     public void setUser(Profile profile) {
         this.profile = profile;
     }
 
+    /**
+     * Initializes the controller class by configuring the grid layout.
+     * 
+     * @param url the location used to resolve relative paths for the root object
+     * @param rb the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         gridConfiguration();
+        personalLogger = new PersonalLogger();
     }
 
+    /**
+     * Configures the grid layout by clearing existing content and setting up
+     * two columns with fixed width.
+     */
     private void gridConfiguration() {
         gridShoes.getChildren().clear();
         gridShoes.getColumnConstraints().clear();
@@ -114,13 +162,20 @@ public class MainPageUserController implements Initializable {
         }
     }
 
+    /**
+     * Loads shoes into the grid pane in a 2-column layout.
+     * Calculates the required number of rows and creates VBox containers
+     * for each shoe.
+     * 
+     * @param list the list of shoes to display
+     */
     private void loadShoesToGridPane(List<Shoe> list) {
-        //Calculate how many columns 
+        // Calculate how many columns 
         shoeList = list;
         if (!shoeList.isEmpty()) {
 
-            //Calculate how wmany rows
-            int neededRows = (int) Math.ceil(shoeList.size() / 2.0); //rounds the number up
+            // Calculate how many rows
+            int neededRows = (int) Math.ceil(shoeList.size() / 2.0); // rounds the number up
 
             for (int i = 0; i < neededRows; i++) {
                 RowConstraints row = new RowConstraints();
@@ -128,7 +183,7 @@ public class MainPageUserController implements Initializable {
                 gridShoes.getRowConstraints().add(row);
             }
 
-            //load the vbox in the grid
+            // Load the vbox in the grid
             for (int i = 0; i < shoeList.size(); i++) {
                 Shoe shoe = shoeList.get(i);
                 VBox vbox = createVbox(shoe);
@@ -138,13 +193,18 @@ public class MainPageUserController implements Initializable {
 
                 gridShoes.add(vbox, column, row);
                 System.out.println("Se ha creado el vbox");
-            }
-
-            
+            }   
         }
-
     }
 
+    /**
+     * Creates a VBox container for displaying a single shoe.
+     * Includes shoe image, name, price, and interactive features like
+     * context menu and click handlers.
+     * 
+     * @param shoe the shoe to display in the VBox
+     * @return the configured VBox containing shoe information
+     */
     private VBox createVbox(Shoe shoe) {
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
@@ -156,18 +216,18 @@ public class MainPageUserController implements Initializable {
 
         vbox.setUserData(shoe);
 
-        //menu contextual
+        // Context menu
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem details = new MenuItem("Ver detalles");
 
         details.setOnAction(e -> {
-            //Alert
+            // Alert
             Alert detailsAlert = new Alert(Alert.AlertType.INFORMATION);
             detailsAlert.setTitle("Shoe info");
             detailsAlert.setHeaderText(shoe.getBrand() + " " + shoe.getModel());
 
-            //SHoe info
+            // Shoe info
             String info = "Shoe: " + shoe.getBrand() + shoe.getModel() + "\n"
                     + "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n"
                     + "Color: " + shoe.getColor() + "\n"
@@ -190,7 +250,7 @@ public class MainPageUserController implements Initializable {
         vbox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) { //left click to different from right click 
+                if (event.getButton() == MouseButton.PRIMARY) { // left click to differentiate from right click 
                     Shoe selectedShoe = (Shoe) vbox.getUserData();
                     openNextWindow(selectedShoe);
                 }
@@ -202,7 +262,6 @@ public class MainPageUserController implements Initializable {
             public void handle(MouseEvent event) {
                 vbox.setStyle("-fx-background-color:#f0f8ff; -fx-border-color: #1e90ff; fx-border-width:2; -fx-border-radious:8; -fx-padding:15; -fx-cursor-hand;");
             }
-
         });
 
         vbox.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -212,7 +271,7 @@ public class MainPageUserController implements Initializable {
             }
         });
 
-        //Image of the shoe in the vbox
+        // Image of the shoe in the vbox
         ImageView imgView = new ImageView();
         String shoeImgPath = shoe.getImgPath();
         System.out.println(shoeImgPath);
@@ -221,6 +280,7 @@ public class MainPageUserController implements Initializable {
             Image img = new Image(getClass().getResourceAsStream("../images/" + shoeImgPath));
             imgView.setImage(img);
         } catch (Exception e) {
+            personalLogger.logError(e.getMessage());
             Image imgDefault = new Image(getClass().getResourceAsStream("../images/default_shoe.png"));
             imgView.setImage(imgDefault);
         }
@@ -229,13 +289,13 @@ public class MainPageUserController implements Initializable {
         imgView.setFitHeight(80);
         imgView.setPreserveRatio(true);
 
-        //THe name
+        // The name
         Label labelName = new Label(shoe.getBrand() + " " + shoe.getModel());
         labelName.setStyle("-fx-font-weight:bold; -fx-font-size:14px;");
         labelName.setWrapText(true);
         labelName.setMaxWidth(150);
 
-        //The price
+        // The price
         Label labelPrice = new Label(String.format("€%.2f", shoe.getPrice()));
         labelPrice.setStyle("-fx-font-size: 16px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;");
 
@@ -244,6 +304,13 @@ public class MainPageUserController implements Initializable {
         return vbox;
     }
 
+    /**
+     * Opens the shoe detail window for the selected shoe.
+     * Closes the current main window and opens a new window with detailed
+     * shoe information.
+     * 
+     * @param shoe the shoe to display in detail
+     */
     private void openNextWindow(Shoe shoe) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/ShoeDetail.fxml"));
@@ -259,23 +326,26 @@ public class MainPageUserController implements Initializable {
             controller.setUser(profile);
             controller.setShoe(shoe);
 
-         
             Stage currentStage = (Stage) gridShoes.getScene().getWindow();
             currentStage.close();
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            personalLogger.logError(ex.getMessage());
         }
     }
 
-
-    //filter
+    /**
+     * Filters shoes by brand name when Enter key is pressed in search field.
+     * If search text is empty, reloads all shoes.
+     * 
+     * @param event the key event triggered by the search field
+     */
     @FXML
     private void filterShoes(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             String textToSearch = searchTextField.getText();
             List<Shoe> filteredShoe = new ArrayList<>();
-            shoeList = cont.loadShoes();
+            shoeList = cont.loadModels();
 
             if (textToSearch != "") {
                 for (Shoe shoe : shoeList) {
@@ -285,33 +355,37 @@ public class MainPageUserController implements Initializable {
                 }
                 gridConfiguration();
                 loadShoesToGridPane(filteredShoe);
-
             }
         } else {
             gridConfiguration();
             loadShoesToGridPane(cont.loadShoes());
         }
-
     }
 
+    /**
+     * Filters shoes by price in ascending, descending, or original order.
+     * Cycles through three states: Original → Ascending → Descending → Original.
+     * Updates the filter label to reflect the current sorting order.
+     * 
+     * @param event the mouse event triggered by clicking the filter icon
+     */
     @FXML
     private void filterByPrice(MouseEvent event) {
-
         shoeList = cont.loadShoes();
         List<Shoe> filteredShoe = new ArrayList<>(shoeList);
 
         switch (filerState) {
             case 0:  // Ascending order
                 Collections.sort(filteredShoe);
-                lblFIlter.setText("Ascendending");
+                lblFIlter.setText("Ascending");
                 filerState = 1;
                 break;
 
-            case 1:  // Descendending order
+            case 1:  // Descending order
                 Collections.sort(filteredShoe, new Comparator<Shoe>() {
                     @Override
                     public int compare(Shoe s1, Shoe s2) {
-                        lblFIlter.setText("Descendending");
+                        lblFIlter.setText("Descending");
                         return s2.compareTo(s1);
                     }
                 });
@@ -329,6 +403,12 @@ public class MainPageUserController implements Initializable {
         loadShoesToGridPane(filteredShoe);
     }
 
+    /**
+     * Opens the profile modification window.
+     * Closes the current window and opens a new window for profile editing.
+     * 
+     * @param event the action event triggered by selecting the modify profile menu item
+     */
     @FXML
     private void openModifyProfileWindow(ActionEvent event) {
         try {
@@ -346,22 +426,48 @@ public class MainPageUserController implements Initializable {
             // Close current window
             Stage currentStage = (Stage) imgFilter.getScene().getWindow();
             currentStage.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             personalLogger.logError(ex.getMessage());
         }
     }
 
+    /**
+     * Opens the user manual PDF file using the system's default PDF viewer.
+     * 
+     * @param event the action event triggered by selecting the report menu item
+     */
     @FXML
     private void openReport(ActionEvent event) {
         try {
-            Desktop.getDesktop().open(new File("../pdfs/MANUAL_DE_USUARIO.pdf"));
+            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
+            if (!pdf.exists()) {
+                personalLogger.logMessage("No existe el PDF: " + pdf.getAbsolutePath());
+                return;
+            }
+            Desktop.getDesktop().open(pdf);
+
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            personalLogger.logError(e.getMessage());
         }
     }
 
+    /**
+     * Opens the user manual PDF file using the system's default PDF viewer.
+     * 
+     * @param event the action event triggered by selecting the manual menu item
+     */
     @FXML
     private void openManual(ActionEvent event) {
-    }
+        try {
+            File pdf = new File("pdfs/INFORME DIN.pdf");
+            if (!pdf.exists()) {
+                personalLogger.logMessage("No existe el PDF: " + pdf.getAbsolutePath());
+                return;
+            }
+            Desktop.getDesktop().open(pdf);
 
+        } catch (Exception e) {
+           personalLogger.logError(e.getMessage());
+        }
+    }
 }

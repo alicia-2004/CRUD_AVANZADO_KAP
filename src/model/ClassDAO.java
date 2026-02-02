@@ -29,6 +29,7 @@ public interface ClassDAO {
     public List<Shoe> getShoesByUser(String username);
     public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin);
     public Boolean addShoe(Shoe shoe);
+    public List<Shoe> loadModels();
 
   
     List comboBoxInsert();

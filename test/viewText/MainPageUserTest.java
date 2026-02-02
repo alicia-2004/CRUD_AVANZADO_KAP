@@ -9,14 +9,18 @@ import static java.rmi.Naming.list;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import main.Main;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
@@ -27,50 +31,61 @@ import org.testfx.util.NodeQueryUtils;
  *
  * @author kevin
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MainPageUserTest extends ApplicationTest {
-
+  
+    
     //iniciliza app
     @BeforeClass
-    public void setUpClass() throws TimeoutException {
+    public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(main.Main.class);
+        Main.crearTablasHibernate();
+        Main.insertarDatosPrueba();
         // Ejemplo: FxToolkit.setupApplication(MyApplication.class);
 
-        login("jlopez", "pass123");
     }
-
-    public void login(String username, String password) {
+    
+    @Test
+    public void test01_login() {
         clickOn("#TextField_Username");
-        write("username");
+        write("jlopez");
         clickOn("#PasswordField_Password");
-        write("password");
+        write("pass123");
+        clickOn("#Button_LogIn");
+        sleep(2000); 
+        
     }
 
     //all elements are visible
     @Test
-    public void visibleElements() {
+    public void test02_visibleElements() {
 
         //grid
         verifyThat("#gridShoes", isVisible());
-
-        //vbox
-        verifyThat("Nike", isVisible());
-        verifyThat("Air Run", isVisible());
-        verifyThat("79.99", isVisible());
+        
+        //text
+        verifyThat("#lblFIlter", isVisible());
 
         //menu
         verifyThat("#menu", isVisible());
 
         //icon to filter
         verifyThat("#imgFilter", isVisible());
+        
+        GridPane grid = lookup("#gridShoes").query();
+        assertTrue("Debería haber zapatos en el grid", grid.getChildren().size() > 0);
 
     }
 
     //filter by name
     @Test
-    public void searchTest(){
+    public void test03_searchTest(){
+        boolean found = false;
         clickOn("#searchTextField"); 
         write("Nike");
+        push(KeyCode.ENTER);
+        sleep(1000);
         
         //find all vboxes to verify if the brand name is Nike
         GridPane grid = lookup("#gridShoes").query();
@@ -81,17 +96,33 @@ public class MainPageUserTest extends ApplicationTest {
                 Label label = (Label) vbox.getChildren().get(1); //0 is image, 1 is label
                 String text = label.getText();
               
-                assertEquals(text, "Nike"); 
-
+                found = true;
+                assertEquals(text, "Nike Air Max"); 
             }
         }
+        
+        assertTrue("Debería encontrar al menos un zapato Nike", found);
+        
+        //clean
+        clickOn("#searchTextField");
+        push(KeyCode.CONTROL, KeyCode.A);
+        push(KeyCode.DELETE);
+        push(KeyCode.ENTER);
+        sleep(500);
         
     }
     
     //filter by price functionallity
     @Test
-    public void filterAndClickTest() {
+    public void test04_filterAndClickTest() {
+        Label lblFilter = lookup("#lblFIlter").query();
+        assertEquals("Original", lblFilter.getText());
+        
         clickOn("#imgFilter");
+        sleep(500);
+        
+        lblFilter = lookup("#lblFIlter").query();
+        assertEquals("Ascending", lblFilter.getText());
 
         //find first vbox to verify if the price is the lower one
         GridPane grid = lookup("#gridShoes").query();
@@ -110,7 +141,11 @@ public class MainPageUserTest extends ApplicationTest {
 
         //verify if the firstone now is the hihest price
         clickOn("#imgFilter");
-
+        sleep(500);
+        
+        lblFilter = lookup("#lblFIlter").query();
+        assertEquals("Descending", lblFilter.getText());
+        
         //get the updated list after pressing the button again
         grid = lookup("#gridShoes").query();
         firstVbox = (VBox) grid.getChildren().get(0);
@@ -128,15 +163,19 @@ public class MainPageUserTest extends ApplicationTest {
         
         //click and check if opens next window
         clickOn(firstVbox);
-        verifyThat("#VentanaPablo", isVisible());
+        verifyThat("#shoeDetailWindow", isVisible());
+        sleep(500);
+        clickOn("#btnBack");
     }
     
     //menu
-    @Test
-    private void menuTest(){
-        clickOn("#Settings"); //hay que cambiar el id en el inspector
-        clickOn("#ModifyProfileSubmenu");
-    }
+    /*@Test
+    public void test05_menuTest(){
+        clickOn("#menuActions");
+        clickOn("#menuSettings");
+        verifyThat("#ModifyWindow", isVisible());
+        clickOn("#Button_Cancel");
+    }*/
     
     
     

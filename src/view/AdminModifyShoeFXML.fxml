@@ -39,17 +39,13 @@
                   <MenuBar fx:id="menu" maxWidth="-Infinity" style="-fx-background-radius: 50;">
                     <menus>
                         <Menu fx:id="menuHome" mnemonicParsing="false" text="Home" />
-                      <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Settings">
-                        <items>
-                          <MenuItem fx:id="ModifyProfileSubmenu" mnemonicParsing="false" text="Modify Profile" />
-                        </items>
-                      </Menu>
-                        <Menu mnemonicParsing="false" text="Actions">
+                        <Menu fx:id="menuActions" mnemonicParsing="false" text="Actions">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Informe" />
+                            <MenuItem fx:id="menuReport" mnemonicParsing="false" onAction="#openReport" text="Informe" />
+                              <MenuItem fx:id="menuSettings" mnemonicParsing="false" onAction="#openModifyProfileWindow" text="Settings" />
                           </items>
                         </Menu>
-                        <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help" />
+                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help" />
                     </menus>
                   </MenuBar>
                </children>
