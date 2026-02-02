@@ -80,6 +80,8 @@ public class AdminModifyShoeFXMLController implements Initializable {
      */
     @FXML
     private Button deleteButton;
+    @FXML
+    private Button addButton;
 
     /**
      * Logger used to register application errors.

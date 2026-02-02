@@ -30,6 +30,8 @@ public class AddProductController implements Initializable {
     @FXML private Button btnAddProduct;
 
     @FXML private ComboBox<String> cmbBrand;
+    @FXML
+    private Button backButton;
 
     @FXML private TextField txtModel;
     @FXML private TextField txtSize;

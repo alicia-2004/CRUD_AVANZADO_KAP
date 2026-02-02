@@ -60,7 +60,7 @@
             <Image url="@../images/nike.jpg" />
          </image>
       </ImageView>
-      <Button layoutX="611.0" layoutY="19.0" mnemonicParsing="false" onAction="#onBack" prefHeight="26.0" prefWidth="58.0" style="-fx-background-radius: 10; -fx-background-color: #5081b3;" text="Back" textFill="WHITE">
+      <Button fx:id="backButton" layoutX="611.0" layoutY="19.0" mnemonicParsing="false" onAction="#onBack" prefHeight="26.0" prefWidth="58.0" style="-fx-background-radius: 10; -fx-background-color: #5081b3;" text="Back" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
