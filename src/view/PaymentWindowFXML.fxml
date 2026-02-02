@@ -39,7 +39,7 @@
          </font>
       </Label>
       <TextField fx:id="textFieldCVV" layoutX="158.0" layoutY="198.0" prefHeight="4.0" prefWidth="139.0" style="-fx-background-radius: 10;" />
-      <Button fx:id="buttonPay" layoutX="32.0" layoutY="233.0" mnemonicParsing="false" onAction="pay" prefHeight="25.0" prefWidth="391.0" style="-fx-background-radius: 10; -fx-background-color: Black;" text="Pay" textFill="WHITE" />
+      <Button fx:id="buttonPay" layoutX="32.0" layoutY="233.0" mnemonicParsing="false" onAction="#pay" prefHeight="25.0" prefWidth="391.0" style="-fx-background-radius: 10; -fx-background-color: Black;" text="Pay" textFill="WHITE" />
       <DatePicker fx:id="datePickerCaducidad" layoutX="140.0" layoutY="149.0" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -252,7 +253,7 @@ public class HibernateDBImplementation implements ClassDAO {
     }
 
     @Override
-    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
+    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, String username) {
 
         HiloConnection connectionThread = new HiloConnection(30);
         connectionThread.start();

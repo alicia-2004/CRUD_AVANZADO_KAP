@@ -7,11 +7,13 @@ package view;
 
 import controller.Controller;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import model.Profile;
 
@@ -28,7 +30,7 @@ public class PaymentWindowFXMLController implements Initializable {
     @FXML
     private Button buttonPay;
     @FXML
-    private Date datePickerCaducidad;
+    private DatePicker datePickerCaducidad;
     private Controller cont;
     private Profile profile;
     
@@ -46,7 +48,7 @@ public class PaymentWindowFXMLController implements Initializable {
     private void pay(){
         String cvv = textFieldCVV.getText();
         String numTarjeta = textFieldNumTarjeta.getText();
-        Date caducidad = (Date) datePickerCaducidad.clone();
+        LocalDate caducidad = datePickerCaducidad.getValue();
         cont.checkPayments(cvv, numTarjeta, caducidad, profile.getUsername());
     }
     

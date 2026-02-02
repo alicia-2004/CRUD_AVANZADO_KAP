@@ -2,6 +2,8 @@ package view;
 
 import controller.Controller;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +34,7 @@ public class ShoeDetailController {
     private Label lblStock;
     @FXML
     private ComboBox<Double> cmbSize;
+    
     @FXML
     private Button buyProductButton;
     
@@ -144,24 +147,23 @@ public class ShoeDetailController {
 
     @FXML
     private void buyProduct(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PaymentWindowFXML.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Modify your profile");
-            stage.setScene(new Scene(root));
-            stage.show();
+       try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/PaymentWindowFXML.fxml"));
+                        Parent root = fxmlLoader.load();
+                        view.PaymentWindowFXMLController controller = fxmlLoader.getController();
+                        controller.setCont(cont);
+                        controller.setUsuario(profile);
+                        
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
 
-            view.PaymentWindowFXMLController controllerWindow = fxmlLoader.getController();
-            controllerWindow.setCont(cont);
-            controllerWindow.setUsuario(profile);
+                        Stage currentStage = (Stage) buyProductButton.getScene().getWindow();
+                        currentStage.close();
 
-            // Close current window
-            Stage currentStage = (Stage) buyProductButton.getScene().getWindow();
-            currentStage.close();
-        } catch (IOException ex) {
-            personalLogger.logError(ex.getMessage());
-        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(PaymentWindowFXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
     }
 
 }
