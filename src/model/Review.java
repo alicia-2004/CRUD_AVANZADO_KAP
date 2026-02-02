@@ -20,11 +20,11 @@ public class Review {
     @Column(name = "ID")
     private int id;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "ID_SHOE")
+    @ManyToOne
+    @JoinColumn(name = "ID_SHOE", nullable = false)
     private Shoe shoe;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "USERNAME")
     private User user;
     

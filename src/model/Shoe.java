@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.List;
 import javax.persistence.*;
 /**
  *
@@ -18,6 +19,19 @@ public class Shoe implements Comparable<Shoe>{
     @Column(name = "ID")
     private int id;
     
+    @OneToMany(
+        mappedBy = "shoe",
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true
+    )
+    private List<Review> reviews;
+    
+    @OneToMany(
+        mappedBy = "shoe",
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true
+    )
+    private List<Order> orders;
     @Column(name = "PRICE", nullable = false)
     private double price;
     

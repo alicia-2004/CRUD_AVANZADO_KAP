@@ -252,32 +252,30 @@ public class HibernateDBImplementation implements ClassDAO {
     }
 
     @Override
-public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
+    public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, String username) {
 
-    HiloConnection connectionThread = new HiloConnection(30);
-    connectionThread.start();
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
 
-    try {
-        Session session = waitForHibernateSession(connectionThread);
+        try {
+            Session session = waitForHibernateSession(connectionThread);
 
-         String hql = "SELECT c FROM Card c, User u WHERE u.username = :username AND u.cardNumber = c.cardNumber AND c.cardNumber = :numTarjetaAND c.cvv = :cvv AND c.expirationDate = :caducidad";
+            String hql = "SELECT c FROM Card c, User u WHERE u.username = :username AND u.cardNumber = c.cardNumber AND c.cardNumber = :numTarjetaAND c.cvv = :cvv AND c.expirationDate = :caducidad";
+            Query<Card> query = session.createQuery(hql, Card.class);
+            query.setParameter("username", username);
+            query.setParameter("numTarjeta", numTarjeta);
+            query.setParameter("cvv", cvv);
+            query.setParameter("caducidad", caducidad);
 
-        Query<Card> query = session.createQuery(hql, Card.class);
-        query.setParameter("username", username);
-        query.setParameter("numTarjeta", numTarjeta);
-        query.setParameter("cvv", cvv);
-        query.setParameter("caducidad", caducidad);
+            return !query.list().isEmpty();
 
-        return !query.list().isEmpty();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
-    } finally {
-        connectionThread.releaseConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            connectionThread.releaseConnection();
+        }
     }
-}
-
 
     @Override
     public List<Shoe> loadShoes() {
@@ -289,9 +287,9 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
             Session session = waitForHibernateSession(connectionThread);
 
             String hql = "FROM Shoe";
-            
+
             Query<Shoe> query = session.createQuery(hql, Shoe.class);
-            
+
             mapShoe = query.list();
             System.out.println("Hace la peticion" + mapShoe);
 
@@ -301,7 +299,7 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
 
         return mapShoe;
     }
-    
+
     @Override
     public List<Shoe> loadModels() {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -312,9 +310,9 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
             Session session = waitForHibernateSession(connectionThread);
 
             String hql = "SELECT s FROM Shoe s WHERE s.id IN (SELECT MIN(s2.id) FROM Shoe s2 GROUP BY s2.model)";
-            
+
             Query<Shoe> query = session.createQuery(hql, Shoe.class);
-            
+
             mapShoe = query.list();
             System.out.println("Hace la peticion" + mapShoe);
 
@@ -324,7 +322,6 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
 
         return mapShoe;
     }
-    
 
     @Override
     public Boolean dropShoe(Shoe shoe) {
@@ -339,7 +336,11 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
             // Verificar password primero
             //Shoe shoe = session.get(Shoe.class, idShoe);
             tx = session.beginTransaction();
-            session.delete(shoe);
+            Shoe shoeToDelete = session.get(Shoe.class, shoe.getId());
+            if (shoeToDelete != null) {
+                session.delete(shoeToDelete);
+            }
+
             tx.commit();
             return true;
 
@@ -387,20 +388,20 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
     public List<Shoe> getShoesByUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
-    public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin){
+    public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin) {
         HiloConnection connectionThread = new HiloConnection(30);
         connectionThread.start();
-        
+
         List<Shoe> result = new ArrayList<>();
-        
-        try{
+
+        try {
             Session session = waitForHibernateSession(connectionThread);
-            String hql = "FROM Shoe s " +
-                 "WHERE s.brand = :brand AND s.model = :model " +
-                 "AND s.color = :color AND s.origin = :origin " +
-                 "ORDER BY s.size ASC";
+            String hql = "FROM Shoe s "
+                    + "WHERE s.brand = :brand AND s.model = :model "
+                    + "AND s.color = :color AND s.origin = :origin "
+                    + "ORDER BY s.size ASC";
 
             Query<Shoe> query = session.createQuery(hql, Shoe.class);
             query.setParameter("brand", brand);
@@ -410,14 +411,13 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
 
             result = query.list();
         } catch (Exception e) {
-           e.printStackTrace();
-        }
-        finally{
+            e.printStackTrace();
+        } finally {
             connectionThread.releaseConnection();
-        } 
+        }
         return result;
     }
-    
+
     @Override
     public Boolean addShoe(Shoe shoe) {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -434,7 +434,9 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
             return true;
 
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             e.printStackTrace();
             return false;
 
@@ -442,6 +444,5 @@ public Boolean checkPayments(String cvv, String numTarjeta, Date caducidad, Stri
             connectionThread.releaseConnection();
         }
     }
-
 
 }
