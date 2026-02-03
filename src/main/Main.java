@@ -134,6 +134,20 @@ public class Main extends Application {
         shoe1.setImgPath("nike_airmax90_negras.jpg");
         session.save(shoe1);
         
+        Shoe shoe4 = new Shoe();
+        shoe4.setPrice(79.99);
+        shoe4.setModel("Air Max");
+        shoe4.setSize(41);
+        shoe4.setExclusive(model.Exclusive.FALSE);
+        shoe4.setManufactorDate(java.sql.Date.valueOf("2024-01-10"));
+        shoe4.setColor("Negro");
+        shoe4.setOrigin("España");
+        shoe4.setBrand("Nike");
+        shoe4.setReserved(model.Reserved.FALSE);
+        shoe4.setStock(11);
+        shoe4.setImgPath("nike_airmax90_negras.jpg");
+        session.save(shoe4);
+        
         Shoe shoe2 = new Shoe();
         shoe2.setPrice(120.50);
         shoe2.setModel("Samba");

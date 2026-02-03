@@ -1,3 +1,10 @@
+/**
+ * Controlador para la ventana de añadir productos.
+ * Permite agregar nuevos zapatos a la base de datos del sistema.
+ * 
+ * @author Pablo
+ * @version 1.0
+ */
 package view;
 
 import controller.Controller;
@@ -24,46 +31,83 @@ import model.Profile;
 import model.Reserved;
 import model.Shoe;
 
-
+/**
+ * Controlador de la ventana para agregar nuevos productos al sistema.
+ * Gestiona la validación de datos y la inserción en la base de datos.
+ */
 public class AddProductController implements Initializable {
 
-    @FXML private Button btnAddProduct;
+    @FXML 
+    private Button btnAddProduct;
 
-    @FXML private ComboBox<String> cmbBrand;
+    @FXML 
+    private ComboBox<String> cmbBrand;
 
-    @FXML private TextField txtModel;
-    @FXML private TextField txtSize;
-    @FXML private TextField txtColor;
-    @FXML private TextField txtOrigin;
-    @FXML private TextField txtStock;
-    @FXML private TextField txtPrice;
-    @FXML private TextField txtDate;
-    @FXML private TextField txtImgPath;
+    @FXML 
+    private TextField txtModel;
+    @FXML 
+    private TextField txtSize;
+    @FXML 
+    private TextField txtColor;
+    @FXML 
+    private TextField txtOrigin;
+    @FXML 
+    private TextField txtStock;
+    @FXML 
+    private TextField txtPrice;
+    @FXML 
+    private TextField txtDate;
+    @FXML 
+    private TextField txtImgPath;
 
-    @FXML private RadioButton rbExclusive;
+    @FXML 
+    private RadioButton rbExclusive;
 
     private Profile profile;
     private Controller cont;
 
+    /**
+     * Establece el perfil del usuario.
+     * @param profile Perfil actual
+     */
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
 
+    /**
+     * Establece el controlador principal.
+     * @param cont Controlador de la aplicación
+     */
     public void setCont(Controller cont) {
         this.cont = cont;
     }
 
+    /**
+     * Inicializa los componentes de la ventana.
+     * @param url Ubicación del FXML
+     * @param rb Recursos del bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cmbBrand.getItems().addAll("Nike", "Adidas", "Puma", "New Balance", "Reebok");
-        txtImgPath.setText("../images/default_shoe.png");
+        txtImgPath.setText("../images/default_img.jpg");
     }
     
+    /**
+     * Cierra la ventana actual.
+     * @param event Evento del botón
+     */
     @FXML
     private void onBack(ActionEvent event) {
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
     }
+    
+    /**
+     * Añade un nuevo producto a la base de datos.
+     * Valida los datos antes de insertar.
+     * @param event Evento del botón
+     */
     @FXML
     private void addProduct(ActionEvent event) {
         try {
@@ -103,7 +147,7 @@ public class AddProductController implements Initializable {
             }
 
             String imgPath = safe(txtImgPath.getText());
-            if (imgPath.isEmpty()) imgPath = "../images/default_shoe.png";
+            if (imgPath.isEmpty()) imgPath = "../images/default_img.jpg";
 
             Exclusive exclusive = rbExclusive.isSelected() ? Exclusive.TRUE : Exclusive.FALSE;
 
@@ -143,7 +187,9 @@ public class AddProductController implements Initializable {
         }
     }
     
-
+    /**
+     * Limpia todos los campos del formulario.
+     */
     private void clearForm() {
         cmbBrand.getSelectionModel().clearSelection();
         txtModel.clear();
@@ -157,10 +203,19 @@ public class AddProductController implements Initializable {
         rbExclusive.setSelected(false);
     }
 
+    /**
+     * Limpia y devuelve un string seguro (sin nulos).
+     * @param s String a limpiar
+     * @return String limpio o vacío
+     */
     private String safe(String s) {
         return s == null ? "" : s.trim();
     }
 
+    /**
+     * Muestra un mensaje de error.
+     * @param msg Mensaje a mostrar
+     */
     private void showError(String msg) {
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setTitle("Error");
@@ -169,6 +224,10 @@ public class AddProductController implements Initializable {
         a.showAndWait();
     }
 
+    /**
+     * Muestra un mensaje informativo.
+     * @param msg Mensaje a mostrar
+     */
     private void showInfo(String msg) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle("OK");

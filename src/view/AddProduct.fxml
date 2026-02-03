@@ -44,7 +44,7 @@
 
       <TextField fx:id="txtDate" layoutX="184.0" layoutY="272.0" prefHeight="25.0" prefWidth="113.0" promptText="YYYY-MM-DD" style="-fx-background-radius: 50;" />
 
-      <TextField fx:id="txtImgPath" layoutX="184.0" layoutY="210.0" prefHeight="26.0" prefWidth="135.0" promptText="../images/default_shoe.png" style="-fx-background-radius: 50;" />
+      <TextField fx:id="txtImgPath" layoutX="184.0" layoutY="210.0" prefHeight="26.0" prefWidth="135.0" promptText="../images/default_img.jpg" style="-fx-background-radius: 50;" />
 
       <RadioButton fx:id="rbExclusive" layoutX="556.0" layoutY="276.0" mnemonicParsing="false" text="Exclusivity" />
 
