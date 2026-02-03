@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 
 /**
  * Implementation of ClassDAO using Hibernate ORM. Handles all database
@@ -252,30 +253,19 @@ public class HibernateDBImplementation implements ClassDAO {
         return thread.getConnection();
     }
 
-    @Override
-    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, String username) {
+// Método para generar un nuevo ID de pedido
+    private Long generateNewOrderId(Session session) {
+        // Opción 1: Consultar el máximo ID y sumar 1
+        String hql = "SELECT MAX(o.orderId) FROM Order o";
+        Query<Long> query = session.createQuery(hql, Long.class);
+        Long maxId = query.uniqueResult();
 
-        HiloConnection connectionThread = new HiloConnection(30);
-        connectionThread.start();
-
-        try {
-            Session session = waitForHibernateSession(connectionThread);
-
-            String hql = "SELECT c FROM Card c, User u WHERE u.username = :username AND u.cardNumber = c.cardNumber AND c.cardNumber = :numTarjetaAND c.cvv = :cvv AND c.expirationDate = :caducidad";
-            Query<Card> query = session.createQuery(hql, Card.class);
-            query.setParameter("username", username);
-            query.setParameter("numTarjeta", numTarjeta);
-            query.setParameter("cvv", cvv);
-            query.setParameter("caducidad", caducidad);
-
-            return !query.list().isEmpty();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            connectionThread.releaseConnection();
+        if (maxId == null) {
+            return 1L; // Primer pedido
         }
+        return maxId + 1;
+
+        // Opción 2: Usar secuencia de base de datos si está configurada
     }
 
     @Override
@@ -441,6 +431,93 @@ public class HibernateDBImplementation implements ClassDAO {
             e.printStackTrace();
             return false;
 
+        } finally {
+            connectionThread.releaseConnection();
+        }
+    }
+
+    @Override
+    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad,
+            User user, Integer shoeId) {
+
+        HiloConnection connectionThread = new HiloConnection(30);
+        connectionThread.start();
+        String username = user.getUsername();
+
+        Transaction tx = null;
+        try {
+            Session session = waitForHibernateSession(connectionThread);
+            tx = session.beginTransaction();
+
+            // 1. COMPROBAR QUE EL USUARIO ES PROPIETARIO DE LA TARJETA
+            String hqlUser = "SELECT u.cardNumber FROM User u WHERE u.username = :username";
+            Query<String> userQuery = session.createQuery(hqlUser, String.class);
+            userQuery.setParameter("username", username);
+
+            String userCardNumber = userQuery.uniqueResult();
+
+            if (userCardNumber == null || !userCardNumber.equals(numTarjeta)) {
+                tx.rollback();
+                return false; // Usuario no tiene esta tarjeta
+            }
+
+            // 2. COMPROBAR DATOS DE LA TARJETA
+            java.sql.Date sqlCaducidad = java.sql.Date.valueOf(caducidad);
+            String hqlCard = "FROM Card c WHERE c.cardNumber = :numTarjeta AND c.cvv = :cvv AND c.expirationDate = :caducidad";
+            Query<Card> cardQuery = session.createQuery(hqlCard, Card.class);
+            cardQuery.setParameter("numTarjeta", numTarjeta);
+            cardQuery.setParameter("cvv", Integer.parseInt(cvv));
+            cardQuery.setParameter("caducidad", sqlCaducidad);
+
+            try {
+                cardQuery.getSingleResult(); // Si lanza excepción, tarjeta no válida
+            } catch (NoResultException e) {
+                tx.rollback();
+                return false;
+            }
+
+            // 3. VERIFICAR Y ACTUALIZAR STOCK (directamente en Shoe)
+            String hqlShoe = "FROM Shoe s WHERE s.id = :shoeId";
+            Query<Shoe> shoeQuery = session.createQuery(hqlShoe, Shoe.class);
+            shoeQuery.setParameter("shoeId", shoeId);
+
+            Shoe shoe = shoeQuery.uniqueResult();
+
+            if (shoe == null || shoe.getStock() < 1) {
+                tx.rollback();
+                return false; // No existe o no hay stock
+            }
+
+            // Restar 1 al stock
+            int nuevoStock = shoe.getStock() - 1;
+            shoe.setStock(nuevoStock);
+
+            // Si stock llega a 0, eliminar zapatilla
+            if (nuevoStock == 0) {
+                session.delete(shoe);
+            } else {
+                session.update(shoe);
+            }
+
+            // 4. CREAR PEDIDO (orderId es autoincrementado)
+            Order newOrder = new Order();
+            // No seteamos orderId - lo genera la BD automáticamente
+            newOrder.setDate(new java.sql.Date(System.currentTimeMillis()));
+            newOrder.setQuantity(1);
+            newOrder.setShoe(shoe);
+            newOrder.setUser(user);
+
+            session.save(newOrder); // Hibernate asignará el ID automático
+
+            tx.commit();
+            return true;
+
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
         } finally {
             connectionThread.releaseConnection();
         }

@@ -153,6 +153,7 @@ public class ShoeDetailController {
                         view.PaymentWindowFXMLController controller = fxmlLoader.getController();
                         controller.setCont(cont);
                         controller.setUsuario(profile);
+                        controller.setShoe(shoe);
                         
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));

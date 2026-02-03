@@ -73,8 +73,9 @@ public class Controller {
         return dao.modificarUser(password, email, name, telephone, surname, username, gender);
     }
 
-    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, String username) {
-        return dao.checkPayments(cvv, numTarjeta, caducidad, username);
+    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, 
+                             User user, Integer shoeId) {
+        return dao.checkPayments(cvv, numTarjeta, caducidad, user, shoeId);
     }
 
     /**

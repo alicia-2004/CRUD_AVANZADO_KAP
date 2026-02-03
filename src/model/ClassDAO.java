@@ -22,7 +22,7 @@ public interface ClassDAO {
     public Boolean dropOutUser(String username, String password);
     public Boolean dropOutAdmin(String usernameToDelete, String adminUsername, String adminPassword);
     public Boolean modificarUser (String password, String email, String name, String telephone, String surname, String username, String gender);
-    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, String username);
+    public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad, User user, Integer shoeId);
     public List<Shoe> loadShoes();
     public Boolean dropShoe(Shoe shoe);
     public Boolean updateStockShoe (Shoe shoe, int stock);
