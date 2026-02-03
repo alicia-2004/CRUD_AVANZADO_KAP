@@ -45,7 +45,10 @@
                             <MenuItem fx:id="menuReport" mnemonicParsing="false" onAction="#openReport" text="Informe" />
                           </items>
                         </Menu>
-                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help" />
+                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help">
+                           <items>
+                              <MenuItem fx:id="menuHelpItem" mnemonicParsing="false" onAction="#openManual" text="Get Help" />
+                           </items></Menu>
                     </menus>
                   </MenuBar>
                </children>
