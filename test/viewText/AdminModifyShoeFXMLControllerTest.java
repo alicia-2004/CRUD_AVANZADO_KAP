@@ -1,5 +1,6 @@
 package viewText;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
@@ -45,7 +46,7 @@ public class AdminModifyShoeFXMLControllerTest extends ApplicationTest {
 
     @Test
     public void test02_elementsVisible() {
-       
+
         verifyThat("#tableShoe", isVisible());
         verifyThat("#deleteButton", isVisible());
 
@@ -78,19 +79,82 @@ public class AdminModifyShoeFXMLControllerTest extends ApplicationTest {
         clickOn("#backButton");
     }
 
+    // @Test
+    // public void test05_openModifyProfile() {
+    //     clickOn("#menuSettings");
+    //     verifyThat("#ModifyWindow", isVisible());
+    //     clickOn("#Button_Cancel");
+    // }
+    //  @Test
+    //  public void test06_openManualPDF() {
+    //     clickOn("#menuReport");
+//
+    // }
     @Test
-    public void test05_openModifyProfile() {
+    public void test05_contextMenuAddShoe() {
+
+        tableShoe = lookup("#tableShoe").queryTableView();
+        interact(() -> tableShoe.getSelectionModel().select(0));
+        rightClickOn(".table-row-cell");
+        clickOn("Add shoe");
+        sleep(500);
+        clickOn("#backButton");
+    }
+
+    @Test
+    public void test06_openModifyProfile() {
+
+        clickOn("#menuActions");
         clickOn("#menuSettings");
-        verifyThat("#ModifyWindow", isVisible());
-        clickOn("#Button_Cancel"); 
+        sleep(500);
+        clickOn("#Button_Cancel");
     }
 
     @Test
-    public void test06_openManualPDF() {
-        clickOn("#menuReport"); 
-       
+    public void test07_editStockInline() {
+
+        tableShoe = lookup("#tableShoe").queryTableView();
+
+        Node cell = lookup(".table-row-cell")
+                .nth(0)
+                .lookup(".table-cell")
+                .nth(5)
+                .query();
+
+        doubleClickOn(cell);
+        write("50");
+
+        push(KeyCode.ENTER);
+
+        Shoe shoe = tableShoe.getItems().get(0);
+
+        assertEquals(50, shoe.getStock());
     }
 
-   
+    @Test
+    public void test08_editStockWrongInline() {
+
+        tableShoe = lookup("#tableShoe").queryTableView();
+
+        Node cell = lookup(".table-row-cell")
+                .nth(0)
+                .lookup(".table-cell")
+                .nth(5)
+                .query();
+
+        doubleClickOn(cell);
+        write("-1");
+
+        push(KeyCode.ENTER);
+        clickOn(".button");
+        sleep(500);
+    }
+
+  //  @Test
+ //   public void test09_openManualPDF_UI() {
+  //  clickOn("#menuHelp");
+  //  clickOn("menuHelpItem");
+ //   assertTrue(true);
+//}
 
 }

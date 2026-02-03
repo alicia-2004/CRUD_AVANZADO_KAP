@@ -315,7 +315,7 @@ public class AdminModifyShoeFXMLController implements Initializable {
     @FXML
     private void openReport(ActionEvent event) {
         try {
-            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
+            File pdf = new File("pdfs/INFORME_DIN.pdf");
             if (!pdf.exists()) {
                 System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
                 return;
@@ -330,12 +330,12 @@ public class AdminModifyShoeFXMLController implements Initializable {
     /**
      * Opens the system manual PDF using the default PDF viewer.
      *
-     * @param event the action event triggered by the menu
+     * @param event the action event triggered by the menu item
      */
     @FXML
     private void openManual(ActionEvent event) {
         try {
-            File pdf = new File("pdfs/INFORME DIN.pdf");
+            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
             if (!pdf.exists()) {
                 System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
                 return;
