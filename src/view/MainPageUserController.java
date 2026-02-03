@@ -110,6 +110,8 @@ public class MainPageUserController implements Initializable {
     
     /** Logger for error tracking */
     private PersonalLogger personalLogger;
+    @FXML
+    private MenuItem menuHelpItem;
 
     /**
      * Sets the application controller and loads shoes into the grid.
@@ -277,11 +279,11 @@ public class MainPageUserController implements Initializable {
         System.out.println(shoeImgPath);
 
         try {
-            Image img = new Image(getClass().getResourceAsStream("../images/" + shoeImgPath));
+            Image img = new Image(getClass().getResource("/images/" + shoeImgPath).toExternalForm());
             imgView.setImage(img);
         } catch (Exception e) {
             personalLogger.logError(e.getMessage());
-            Image imgDefault = new Image(getClass().getResourceAsStream("../images/default_shoe.png"));
+            Image imgDefault = new Image(getClass().getResource("/images/default_img.jpg").toExternalForm());
             imgView.setImage(imgDefault);
         }
 
@@ -459,15 +461,15 @@ public class MainPageUserController implements Initializable {
     @FXML
     private void openManual(ActionEvent event) {
         try {
-            File pdf = new File("pdfs/INFORME DIN.pdf");
+            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
             if (!pdf.exists()) {
-                personalLogger.logMessage("No existe el PDF: " + pdf.getAbsolutePath());
+                System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
                 return;
             }
             Desktop.getDesktop().open(pdf);
 
         } catch (Exception e) {
-           personalLogger.logError(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

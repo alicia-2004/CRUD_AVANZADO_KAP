@@ -94,7 +94,7 @@ public class ShoeDetailController {
         lblSubtitle.setText(s.getColor() + " (" + s.getOrigin() + ")");
         lblPrice.setText(String.format("€%.2f", s.getPrice()));
 
-        setImageSafe("../images/" + s.getImgPath());
+        setImageSafe("/images/" + s.getImgPath());
     }
 
     private void fillSizesComboAndSelectInitial(double initialSize) {
@@ -140,7 +140,7 @@ public class ShoeDetailController {
             Image img = new Image(getClass().getResourceAsStream(path));
             imgShoe.setImage(img);
         } catch (Exception e) {
-            Image imgDefault = new Image(getClass().getResourceAsStream("../images/default_shoe.png"));
+            Image imgDefault = new Image(getClass().getResource("/images/default_img.jpg").toExternalForm());
             imgShoe.setImage(imgDefault);
         }
     }
