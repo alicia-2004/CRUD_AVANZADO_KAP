@@ -6,9 +6,15 @@
 package model;
 
 /**
- *
- * @author pablo
+ * Shows if something is reserved. Can be TRUE or FALSE
  */
 public enum Reserved {
-    TRUE, FALSE
+    /**
+     * Yes, it is reserved
+     */
+    TRUE,
+    /**
+     * No, it is free
+     */
+    FALSE
 }
