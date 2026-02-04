@@ -161,13 +161,19 @@ public class MainPageUserTest extends ApplicationTest {
             }
         }
         
+        rightClickOn(firstVbox);
+        clickOn("Details");
+        sleep(500);
+        verifyThat("#Shoe info", isVisible());
+        clickOn("Aceptar");  
+        
         //click and check if opens next window
         clickOn(firstVbox);
         verifyThat("#shoeDetailWindow", isVisible());
         sleep(500);
         clickOn("#btnBack");
     }
-    
+   
     //menu
     /*@Test
     public void test05_menuTest(){
