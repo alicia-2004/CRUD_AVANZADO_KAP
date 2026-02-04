@@ -33,13 +33,11 @@ public class HibernateDBImplementation implements ClassDAO {
         try {
             Session session = waitForHibernateSession(connectionThread);
 
-            // Buscar User
             User user = session.get(User.class, username);
             if (user != null && user.getPassword().equals(password)) {
                 return user;
             }
 
-            // Si no es User, buscar Admin
             Admin admin = session.get(Admin.class, username);
             if (admin != null && admin.getPassword().equals(password)) {
                 return admin;
@@ -70,7 +68,7 @@ public class HibernateDBImplementation implements ClassDAO {
             tx = session.beginTransaction();
 
             User user = new User(gender, cardNumber, username, password, email,
-                    name, telephone, surname); // userCode lo genera la BD
+                    name, telephone, surname);
 
             session.save(user);
             tx.commit();
@@ -100,7 +98,6 @@ public class HibernateDBImplementation implements ClassDAO {
         try {
             Session session = waitForHibernateSession(connectionThread);
 
-            // Verificar password primero
             User user = session.get(User.class, username);
             if (user == null || !user.getPassword().equals(password)) {
                 return false;
@@ -135,13 +132,10 @@ public class HibernateDBImplementation implements ClassDAO {
         try {
             Session session = waitForHibernateSession(connectionThread);
 
-            // Verificar que el admin existe y password es correcto
             Admin admin = session.get(Admin.class, adminUsername);
             if (admin == null || !admin.getPassword().equals(adminPassword)) {
                 return false;
             }
-
-            // Buscar el usuario a eliminar (puede ser User o Admin)
             Profile profileToDelete = session.get(User.class, usernameToDelete);
             if (profileToDelete == null) {
                 profileToDelete = session.get(Admin.class, usernameToDelete);
@@ -190,7 +184,6 @@ public class HibernateDBImplementation implements ClassDAO {
 
             tx = session.beginTransaction();
 
-            // Actualizar campos
             user.setPassword(password);
             user.setEmail(email);
             user.setName(name);
@@ -248,26 +241,29 @@ public class HibernateDBImplementation implements ClassDAO {
             Thread.sleep(10);
             attempts++;
         }
-        // Asumo que tu HiloConnection puede proporcionar una Session de Hibernate
-        // Si no, necesitarías adaptar HiloConnection para Hibernate
+
         return thread.getConnection();
     }
 
-// Método para generar un nuevo ID de pedido
+    /**
+     * Generates a new order ID.
+     */
     private Long generateNewOrderId(Session session) {
-        // Opción 1: Consultar el máximo ID y sumar 1
+
         String hql = "SELECT MAX(o.orderId) FROM Order o";
         Query<Long> query = session.createQuery(hql, Long.class);
         Long maxId = query.uniqueResult();
 
         if (maxId == null) {
-            return 1L; // Primer pedido
+            return 1L;
         }
         return maxId + 1;
 
-        // Opción 2: Usar secuencia de base de datos si está configurada
     }
 
+    /**
+     * Loads shoes from the database.
+     */
     @Override
     public List<Shoe> loadShoes() {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -291,6 +287,9 @@ public class HibernateDBImplementation implements ClassDAO {
         return mapShoe;
     }
 
+    /**
+     * Loads models from the database.
+     */
     @Override
     public List<Shoe> loadModels() {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -314,6 +313,9 @@ public class HibernateDBImplementation implements ClassDAO {
         return mapShoe;
     }
 
+    /**
+     * Drops a shoe from the database.
+     */
     @Override
     public Boolean dropShoe(Shoe shoe) {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -324,8 +326,6 @@ public class HibernateDBImplementation implements ClassDAO {
         try {
             Session session = waitForHibernateSession(connectionThread);
 
-            // Verificar password primero
-            //Shoe shoe = session.get(Shoe.class, idShoe);
             tx = session.beginTransaction();
             Shoe shoeToDelete = session.get(Shoe.class, shoe.getId());
             if (shoeToDelete != null) {
@@ -348,6 +348,9 @@ public class HibernateDBImplementation implements ClassDAO {
 
     }
 
+    /**
+     * Updates stock of a shoe.
+     */
     @Override
     public Boolean updateStockShoe(Shoe shoe, int stock) {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -375,11 +378,17 @@ public class HibernateDBImplementation implements ClassDAO {
         }
     }
 
+    /**
+     * Gets shoes by user.
+     */
     @Override
     public List<Shoe> getShoesByUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Loads shoe variants.
+     */
     @Override
     public List<Shoe> loadShoeVariants(String brand, String model, String color, String origin) {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -409,6 +418,9 @@ public class HibernateDBImplementation implements ClassDAO {
         return result;
     }
 
+    /**
+     * Adds a shoe to the database.
+     */
     @Override
     public Boolean addShoe(Shoe shoe) {
         HiloConnection connectionThread = new HiloConnection(30);
@@ -436,6 +448,9 @@ public class HibernateDBImplementation implements ClassDAO {
         }
     }
 
+    /**
+     * Checks payments.
+     */
     @Override
     public Boolean checkPayments(String cvv, String numTarjeta, LocalDate caducidad,
             User user, Integer shoeId) {
@@ -449,7 +464,6 @@ public class HibernateDBImplementation implements ClassDAO {
             Session session = waitForHibernateSession(connectionThread);
             tx = session.beginTransaction();
 
-            // 1. COMPROBAR QUE EL USUARIO ES PROPIETARIO DE LA TARJETA
             String hqlUser = "SELECT u.cardNumber FROM User u WHERE u.username = :username";
             Query<String> userQuery = session.createQuery(hqlUser, String.class);
             userQuery.setParameter("username", username);
@@ -458,10 +472,9 @@ public class HibernateDBImplementation implements ClassDAO {
 
             if (userCardNumber == null || !userCardNumber.equals(numTarjeta)) {
                 tx.rollback();
-                return false; // Usuario no tiene esta tarjeta
+                return false;
             }
 
-            // 2. COMPROBAR DATOS DE LA TARJETA
             java.sql.Date sqlCaducidad = java.sql.Date.valueOf(caducidad);
             String hqlCard = "FROM Card c WHERE c.cardNumber = :numTarjeta AND c.cvv = :cvv AND c.expirationDate = :caducidad";
             Query<Card> cardQuery = session.createQuery(hqlCard, Card.class);
@@ -470,13 +483,12 @@ public class HibernateDBImplementation implements ClassDAO {
             cardQuery.setParameter("caducidad", sqlCaducidad);
 
             try {
-                cardQuery.getSingleResult(); // Si lanza excepción, tarjeta no válida
+                cardQuery.getSingleResult();
             } catch (NoResultException e) {
                 tx.rollback();
                 return false;
             }
 
-            // 3. VERIFICAR Y ACTUALIZAR STOCK (directamente en Shoe)
             String hqlShoe = "FROM Shoe s WHERE s.id = :shoeId";
             Query<Shoe> shoeQuery = session.createQuery(hqlShoe, Shoe.class);
             shoeQuery.setParameter("shoeId", shoeId);
@@ -485,29 +497,26 @@ public class HibernateDBImplementation implements ClassDAO {
 
             if (shoe == null || shoe.getStock() < 1) {
                 tx.rollback();
-                return false; // No existe o no hay stock
+                return false;
             }
 
-            // Restar 1 al stock
             int nuevoStock = shoe.getStock() - 1;
             shoe.setStock(nuevoStock);
 
-            // Si stock llega a 0, eliminar zapatilla
             if (nuevoStock == 0) {
                 session.delete(shoe);
             } else {
                 session.update(shoe);
             }
 
-            // 4. CREAR PEDIDO (orderId es autoincrementado)
             Order newOrder = new Order();
-            // No seteamos orderId - lo genera la BD automáticamente
+
             newOrder.setDate(new java.sql.Date(System.currentTimeMillis()));
             newOrder.setQuantity(1);
             newOrder.setShoe(shoe);
             newOrder.setUser(user);
 
-            session.save(newOrder); // Hibernate asignará el ID automático
+            session.save(newOrder);
 
             tx.commit();
             return true;
