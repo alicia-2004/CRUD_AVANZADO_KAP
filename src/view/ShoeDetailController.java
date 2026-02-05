@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert; // AÑADIR ESTE IMPORT
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -57,7 +58,7 @@ public class ShoeDetailController {
     @FXML
     private Button buyProductButton;
     
-    private PersonalLogger personalLogger;
+    private PersonalLogger personalLogger = new PersonalLogger(); // INICIALIZAR
     private Controller cont;
     private Profile profile;
     private Shoe shoe;
@@ -85,6 +86,19 @@ public class ShoeDetailController {
     private Label lblFIlter;
     @FXML
     private Button btnBack;
+    @FXML
+    private MenuItem context; // MenuItem del menú contextual
+
+    /**
+     * Método de inicialización - cambiar el texto del menú contextual
+     */
+    @FXML
+    public void initialize() {
+        // Cambiar el texto del menú contextual a "Detalles"
+        if (context != null) {
+            context.setText("Detalles");
+        }
+    }
 
     /**
      * Establece el controlador principal.
@@ -216,6 +230,38 @@ public class ShoeDetailController {
             Image imgDefault = new Image(getClass().getResource("/images/default_img.jpg").toExternalForm());
             imgShoe.setImage(imgDefault);
         }
+    }
+    
+    /**
+ * Abre el menú contextual para mostrar detalles de la zapatilla.
+ * Se activa al hacer clic derecho en la ventana.
+ * @param event Evento del menú
+ */
+    @FXML
+    private void openMenuContext(ActionEvent event) {
+        if (shoe == null) {
+            System.out.println("No hay zapatilla seleccionada");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Detalles de la zapatilla");
+        alert.setHeaderText(shoe.getBrand() + " " + shoe.getModel());
+
+        String info = "Marca: " + shoe.getBrand() + "\n" +
+                     "Modelo: " + shoe.getModel() + "\n" +
+                     "Color: " + shoe.getColor() + "\n" +
+                     "Origen: " + shoe.getOrigin() + "\n" +
+                     "Precio: " + String.format("€%.2f", shoe.getPrice()) + "\n" +
+                     "Talla: " + shoe.getSize() + "\n" +
+                     "Stock disponible: " + (selectedVariant != null ? selectedVariant.getStock() : shoe.getStock()) + " unidades";
+
+        alert.setContentText(info);
+
+        alert.setWidth(400);
+        alert.setHeight(350);
+
+        alert.showAndWait();
     }
     
     /**
