@@ -123,7 +123,7 @@ public class MainPageUserController implements Initializable {
 
         if (cont != null) {
             loadShoesToGridPane(cont.loadModels());
-            System.out.println("lista completa cargada: " + cont.loadShoes());
+            System.out.println("lista completa cargada: " + cont.loadModels());
         }
     }
 
@@ -146,6 +146,7 @@ public class MainPageUserController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         gridConfiguration();
         personalLogger = new PersonalLogger();
+        personalLogger.logMessage("Se ha inciado la aplicación");
     }
 
     /**
@@ -360,7 +361,7 @@ public class MainPageUserController implements Initializable {
             }
         } else {
             gridConfiguration();
-            loadShoesToGridPane(cont.loadShoes());
+            loadShoesToGridPane(cont.loadModels());
         }
     }
 
@@ -373,7 +374,7 @@ public class MainPageUserController implements Initializable {
      */
     @FXML
     private void filterByPrice(MouseEvent event) {
-        shoeList = cont.loadShoes();
+        shoeList = cont.loadModels();
         List<Shoe> filteredShoe = new ArrayList<>(shoeList);
 
         switch (filerState) {
@@ -381,6 +382,7 @@ public class MainPageUserController implements Initializable {
                 Collections.sort(filteredShoe);
                 lblFIlter.setText("Ascending");
                 filerState = 1;
+                personalLogger.logMessage("Fileter ascending");
                 break;
 
             case 1:  // Descending order
@@ -392,12 +394,14 @@ public class MainPageUserController implements Initializable {
                     }
                 });
                 filerState = 2;
+                personalLogger.logMessage("Fileter descending");
                 break;
 
             case 2:  // Original order
                 filteredShoe = shoeList;
                 lblFIlter.setText("Original");
                 filerState = 0;
+                personalLogger.logMessage("Original order");
                 break;
         }
 
@@ -447,7 +451,7 @@ public class MainPageUserController implements Initializable {
                 return;
             }
             Desktop.getDesktop().open(pdf);
-
+            personalLogger.logMessage("Informe abierto");
         } catch (Exception e) {
             personalLogger.logError(e.getMessage());
         }
@@ -467,7 +471,7 @@ public class MainPageUserController implements Initializable {
                 return;
             }
             Desktop.getDesktop().open(pdf);
-
+            personalLogger.logMessage("Manual abierto");
         } catch (Exception e) {
             e.printStackTrace();
         }
