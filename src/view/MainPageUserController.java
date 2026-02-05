@@ -221,7 +221,7 @@ public class MainPageUserController implements Initializable {
         // Context menu
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem details = new MenuItem("Ver detalles");
+        MenuItem details = new MenuItem("Details");
 
         details.setOnAction(e -> {
             // Alert
