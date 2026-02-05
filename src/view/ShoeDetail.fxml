@@ -22,7 +22,6 @@
 
    <children>
 
-      <!-- SIDEBAR IZQUIERDA -->
       <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="95.0" spacing="300.0" style="-fx-background-color: #5081b3;">
          <children>
             <ImageView fitHeight="71.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
@@ -36,27 +35,22 @@
          </children>
       </VBox>
 
-      <!-- ZONA DERECHA -->
       <VBox prefHeight="400.0" prefWidth="500.0" spacing="10.0">
          <children>
 
-            <!-- MENU SUPERIOR -->
-            <FlowPane alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="33.0" prefWidth="498.0">
+            <!-- MENU SUPERIOR-->
+            <FlowPane alignment="TOP_CENTER" prefHeight="33.0" prefWidth="498.0">
                <children>
-                  <MenuBar fx:id="menu" maxWidth="1.7976931348623157E308" style="-fx-background-radius: 50;">
+                  <MenuBar fx:id="menu" maxWidth="-Infinity" style="-fx-background-radius: 50;">
                     <menus>
                         <Menu fx:id="menuHome" mnemonicParsing="false" text="Home" />
-                        <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Settings">
+                        <Menu fx:id="menuActions" mnemonicParsing="false" text="Actions">
                           <items>
-                            <MenuItem fx:id="ModifyProfileSubmenu" mnemonicParsing="false" text="Modify Profile" />
+                            <MenuItem fx:id="menuReport" mnemonicParsing="false" onAction="#openReport" text="Informe" />
+                            <MenuItem fx:id="menuSettings" mnemonicParsing="false" onAction="#openModifyProfileWindow" text="Settings" />
                           </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Actions">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Informe" />
-                          </items>
-                        </Menu>
-                        <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help" />
+                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help" />
                     </menus>
                   </MenuBar>
                </children>
