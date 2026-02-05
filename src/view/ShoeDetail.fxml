@@ -51,7 +51,10 @@
                             <MenuItem fx:id="menuSettings" mnemonicParsing="false" onAction="#openModifyProfileWindow" text="Settings" />
                           </items>
                         </Menu>
-                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help" />
+                        <Menu fx:id="menuHelp" mnemonicParsing="false" onAction="#openManual" text="Help">
+                           <items>
+                              <MenuItem fx:id="menuHelpItem" mnemonicParsing="false" onAction="#openManual" text="Get Help" />
+                           </items></Menu>
                     </menus>
                   </MenuBar>
                </children>

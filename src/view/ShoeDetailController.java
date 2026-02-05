@@ -88,11 +88,12 @@ public class ShoeDetailController {
     private Button btnBack;
     @FXML
     private MenuItem context; // MenuItem del menú contextual
+    @FXML
+    private MenuItem menuHelpItem;
 
     /**
      * Método de inicialización - cambiar el texto del menú contextual
      */
-    @FXML
     public void initialize() {
         // Cambiar el texto del menú contextual a "Detalles"
         if (context != null) {
@@ -290,13 +291,13 @@ public class ShoeDetailController {
     @FXML
     private void openManual(ActionEvent event) {
         try {
-            File pdf = new File("pdfs/INFORME DIN.pdf");
+            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
             if (!pdf.exists()) {
                 System.out.println("No existe el PDF: " + pdf.getAbsolutePath());
                 return;
             }
             Desktop.getDesktop().open(pdf);
-
+            personalLogger.logMessage("Manual abierto");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -353,5 +354,6 @@ public class ShoeDetailController {
             personalLogger.logError(ex.getMessage());
         }
     }
+    
 
 }

@@ -91,7 +91,7 @@ public class AddProductController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cmbBrand.getItems().addAll("Nike", "Adidas", "Puma", "New Balance", "Reebok");
-        txtImgPath.setText("../images/default_img.jpg");
+        txtImgPath.setText("default_img.jpg");
     }
     
     /**
@@ -148,7 +148,7 @@ public class AddProductController implements Initializable {
             }
 
             String imgPath = safe(txtImgPath.getText());
-            if (imgPath.isEmpty()) imgPath = "../images/default_img.jpg";
+            if (imgPath.isEmpty()) imgPath = "default_img.jpg";
 
             Exclusive exclusive = rbExclusive.isSelected() ? Exclusive.TRUE : Exclusive.FALSE;
 
@@ -200,7 +200,7 @@ public class AddProductController implements Initializable {
         txtStock.clear();
         txtPrice.clear();
         txtDate.clear();
-        txtImgPath.setText("../images/default_shoe.png");
+        txtImgPath.setText("default_shoe.png");
         rbExclusive.setSelected(false);
     }
 
