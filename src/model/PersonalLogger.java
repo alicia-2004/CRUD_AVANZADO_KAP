@@ -45,8 +45,7 @@ public class PersonalLogger {
      */
     public void logMessage(String mensaje) {
         File fichLogs = new File("logs.dat");
-        String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-                + " - *MENSAJE INFORMATIVO*:" + mensaje;
+        String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - *MENSAJE INFORMATIVO*:" + mensaje + System.lineSeparator();
         logMensajes.add(logGuardado);
 
         try {
@@ -69,8 +68,7 @@ public class PersonalLogger {
      */
     public void logError(String mensaje) {
         File fichLogs = new File("errors.dat");
-        String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-                + " - *INFORMACIÓN ERROR*: " + mensaje;
+        String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - *INFORMACIÓN ERROR*: " + mensaje + System.lineSeparator();
         logMensajes.add(logGuardado);
 
         try {
@@ -81,7 +79,6 @@ public class PersonalLogger {
             e.printStackTrace();
         }
 
-        System.out.println("llega al log");
         System.out.println(logGuardado);
     }
 }

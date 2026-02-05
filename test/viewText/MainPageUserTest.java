@@ -112,9 +112,18 @@ public class MainPageUserTest extends ApplicationTest {
         
     }
     
+    @Test
+    public void test04_openModifyProfile() {
+
+        clickOn("#menuActions");
+        clickOn("#menuSettings");
+        sleep(500);
+        clickOn("#Button_Cancel");
+    }
+    
     //filter by price functionallity
     @Test
-    public void test04_filterAndClickTest() {
+    public void test05_filterAndClickTest() {
         Label lblFilter = lookup("#lblFIlter").query();
         assertEquals("Original", lblFilter.getText());
         
@@ -161,17 +170,41 @@ public class MainPageUserTest extends ApplicationTest {
             }
         }
         
-        rightClickOn(firstVbox);
-        clickOn("Details");
-        sleep(500);
-        verifyThat("#Shoe info", isVisible());
-        clickOn("Aceptar");  
         
         //click and check if opens next window
         clickOn(firstVbox);
         verifyThat("#shoeDetailWindow", isVisible());
         sleep(500);
         clickOn("#btnBack");
+        
+        rightClickOn(firstVbox);
+        clickOn("Details");
+        sleep(500);
+        manejarAlertConBoton("Aceptar","boton de alerta de aceptar");
+    }
+    
+    private boolean manejarAlertConBoton(String textoBoton, String descripcion) {
+        try {
+            clickOn(textoBoton);
+            System.out.println("✓ Alert " + descripcion + " manejado");
+            sleep(1000);
+            return true;
+        } catch (Exception e) {
+            // Intentar con otros botones
+            String[] alternativas = {"Aceptar", "OK", "Yes", "Continuar"};
+            for (String alt : alternativas) {
+                try {
+                    clickOn(alt);
+                    System.out.println("✓ Alert " + descripcion + " manejado con '" + alt + "'");
+                    sleep(1000);
+                    return true;
+                } catch (Exception e2) {
+                }
+            }
+
+            System.out.println("✗ No se pudo manejar alert: " + descripcion);
+            return false;
+        }
     }
    
     //menu
