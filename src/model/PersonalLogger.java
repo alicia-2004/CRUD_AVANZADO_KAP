@@ -28,12 +28,14 @@ public class PersonalLogger {
      * List that stores all log messages in memory.
      */
     private ArrayList<String> logMensajes;
+    private ArrayList<String> logErrores;
 
     /**
      * Creates a new PersonalLogger with an empty message list.
      */
     public PersonalLogger() {
         logMensajes = new ArrayList<>();
+        logErrores = new ArrayList<>();
     }
 
     /**
@@ -69,7 +71,7 @@ public class PersonalLogger {
     public void logError(String mensaje) {
         File fichLogs = new File("errors.dat");
         String logGuardado = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - *INFORMACIÓN ERROR*: " + mensaje + System.lineSeparator();
-        logMensajes.add(logGuardado);
+        logErrores.add(logGuardado);
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichLogs, true));

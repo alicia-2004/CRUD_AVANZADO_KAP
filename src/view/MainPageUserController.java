@@ -445,7 +445,7 @@ public class MainPageUserController implements Initializable {
     @FXML
     private void openReport(ActionEvent event) {
         try {
-            File pdf = new File("pdfs/MANUAL_DE_USUARIO.pdf");
+            File pdf = new File("pdfs/INFORME_DIN.pdf");
             if (!pdf.exists()) {
                 personalLogger.logMessage("No existe el PDF: " + pdf.getAbsolutePath());
                 return;
